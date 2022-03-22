@@ -9,8 +9,6 @@ import 'package:tarot/widgets/gradient_border.dart';
 
 class CardsCategoriesDescription extends StatelessWidget
     with PlanetScreenMixin {
-  //static const String routeName = '/handbook_cards_categories';
-
   @override
   PlanetOffset? get planetOne => PlanetOffset(
         right: -162.0,
@@ -31,12 +29,7 @@ class CardsCategoriesDescription extends StatelessWidget
     return Scaffold(
       body: Column(
         children: [
-          AppTopBar(
-            title: 'Cards Descriptions',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
-          ),
+          AppTopBar(title: 'Cards Descriptions'),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(

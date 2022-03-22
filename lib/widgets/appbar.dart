@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tarot/app_module.dart';
 
 class AppTopBar extends StatelessWidget {
   final String title;
@@ -26,11 +27,11 @@ class AppTopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (onLeadingPressed != null)
-            IconButton(
-              icon: Icon(Icons.arrow_back_ios_rounded),
-              onPressed: onLeadingPressed,
-            ),
+          IconButton(
+            icon: Icon(Icons.arrow_back_ios_rounded),
+            onPressed:
+                onLeadingPressed ?? () => provideNavHelper().onBackPressed(),
+          ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +53,7 @@ class AppTopBar extends StatelessWidget {
               ],
             ),
           ),
-          if (onLeadingPressed != null) SizedBox(width: 48.0),
+          SizedBox(width: 48.0),
         ],
       ),
     );

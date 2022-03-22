@@ -104,9 +104,6 @@ class _CardOfDayScreenState extends BaseAdScreenState<CardOfDayScreen> {
         children: [
           AppTopBar(
             title: 'Card of Day',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
             shrink: true,
           ),
           Text(

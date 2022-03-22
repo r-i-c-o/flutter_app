@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tarot/models/tarot_card.dart';
 import 'package:tarot/providers/shared_preferences_provider.dart';
 import 'package:tarot/theme/app_colors.dart';
-import 'package:tarot/widgets/banner_widget.dart';
+//import 'package:tarot/widgets/banner_widget.dart';
 
 class TextSplitted extends StatefulWidget {
   final TwoStringsSplitByNewline interpretation;
@@ -30,7 +30,7 @@ class _TextSplittedState extends State<TextSplitted> {
             textAlign: TextAlign.justify,
           ),
         ),
-        BannerWidget.huge(),
+        //BannerWidget.huge(),
         Consumer<SharedPreferencesProvider>(
           builder: (_, value, __) => Text(
             widget.interpretation.second,

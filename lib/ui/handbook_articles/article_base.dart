@@ -35,9 +35,6 @@ class ArticleBase extends StatelessWidget with PlanetScreenMixin {
           AppTopBar(
             shrink: true,
             title: 'Tarot Handbook',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
           ),
           Expanded(
             child: Padding(

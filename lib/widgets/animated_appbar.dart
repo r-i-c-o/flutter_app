@@ -26,7 +26,7 @@ class FadingAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       child: AppTopBar(
         title: title,
-        onLeadingPressed: onLeadingPressed ?? () {},
+        onLeadingPressed: onLeadingPressed,
         shrink: true,
       ),
     );

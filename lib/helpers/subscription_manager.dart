@@ -1,30 +1,20 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:apphud/apphud.dart';
+//import 'package:apphud/apphud.dart';
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:tarot/helpers/remote_config.dart';
 import 'package:rxdart/streams.dart';
 
-class SubscriptionManager {
-  static const String _revenuecatApiKey = "fhbnZanRslQQfdPlXHElULRSRRqpfOnY";
-  static const String _apphudApiKey = 'app_tbvBXRQzMRaPnH3oXriDQbwhxaHcCx';
-  static SubscriptionManager? _instance;
-  static SubscriptionManager get instance {
-    _instance ??= SubscriptionManager._();
-    return _instance!;
-  }
-
-  List<ProductWrapper> currentProducts = [];
-
-  SubscriptionManager._();
+class SubscriptionRepository {
+  //List<ProductWrapper> currentProducts = [];
 
   bool _isSubscribed = false;
   bool get subscribed => _isSubscribed;
   StreamController<bool> _subscriptionController =
-      StreamController<bool>.broadcast()..add(false);
+      StreamController<bool>.broadcast();
   late Stream<bool> subscriptionStream;
 
   void changeSubscriptionStatus(bool isSubscribed) {
@@ -32,9 +22,10 @@ class SubscriptionManager {
     _subscriptionController.add(subscribed);
   }
 
-  void init() async {
+  Future<SubscriptionRepository> init() async {
     subscriptionStream = _subscriptionController.stream.shareValueSeeded(false);
-    InAppPurchaseConnection.enablePendingPurchases();
+    return this;
+    /*InAppPurchaseConnection.enablePendingPurchases();
     try {
       await Purchases.setDebugLogsEnabled(false);
       await Purchases.setup(_revenuecatApiKey, observerMode: true);
@@ -94,16 +85,16 @@ class SubscriptionManager {
     } catch (e, s) {
       changeSubscriptionStatus(false);
       //await FirebaseCrashlytics.instance.recordError(e, s);
-    }
+    }*/
   }
 }
 
-class ProductWrapper {
+/*class ProductWrapper {
   final ProductDetails productDetails;
   final SubscriptInfo info;
 
   ProductWrapper(this.productDetails, this.info);
-}
+}*/
 
 class SubscriptInfo {
   final String productId;

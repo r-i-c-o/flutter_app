@@ -1,18 +1,12 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get_it/get_it.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/helpers/shared_preferences_manager.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationManager {
-  static NotificationManager? _instance;
-  static NotificationManager get instance {
-    _instance ??= NotificationManager._();
-    return _instance!;
-  }
-
   late Duration _offset;
-
-  NotificationManager._();
 
   final NotificationDetails notificationDetails = NotificationDetails(
     android: AndroidNotificationDetails(
@@ -25,7 +19,7 @@ class NotificationManager {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> init() async {
+  Future<NotificationManager> init() async {
     tz.initializeTimeZones();
     _offset = DateTime.now().timeZoneOffset;
 
@@ -49,17 +43,20 @@ class NotificationManager {
     bool isInitialized = await _flutterLocalNotificationsPlugin
             .initialize(initializationSettings) ??
         false;
+    GetIt getIt = GetIt.instance;
+    await getIt.isReady<SharedPreferencesManager>();
+    SharedPreferencesManager sp = providePrefs();
     if (isInitialized &&
-        SharedPreferencesManager.instance.prefs
-                .getStringList(SharedPreferencesManager.notificationsListKey) ==
+        sp.prefs.getStringList(SharedPreferencesManager.notificationsListKey) ==
             null) {
       var initialTimes = ["09:00", "19:00"];
-      SharedPreferencesManager.instance.prefs.setStringList(
+      sp.prefs.setStringList(
         SharedPreferencesManager.notificationsListKey,
         initialTimes,
       );
       enableNotifications(initialTimes);
     }
+    return this;
   }
 
   Future<void> cancelNotifications() async {

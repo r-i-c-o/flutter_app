@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:apphud/apphud.dart';
+//import 'package:apphud/apphud.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:get_it/get_it.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:tarot/helpers/ad_manager.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
@@ -48,14 +49,17 @@ class PayWall extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _PayWallState extends BaseAdScreenState<PayWall> {
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  SubscriptionRepository _subscriptionManager =
+      GetIt.I.get<SubscriptionRepository>();
+  NavigationHelper _navigationHelper = GetIt.I.get<NavigationHelper>();
+  //InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
   late StreamSubscription _streamSubscription;
 
   int _subscriptionIndex = 0;
 
-  List<ProductWrapper> _productsList = [];
+  //List<ProductWrapper> _productsList = [];
 
-  List<PurchaseDetails> _purchases = [];
+  //List<PurchaseDetails> _purchases = [];
 
   _PayWallState(String interstitialAdUnitId) : super(interstitialAdUnitId);
 
@@ -63,7 +67,7 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
   void initState() {
     super.initState();
     _initialize();
-    _productsList = SubscriptionManager.instance.currentProducts;
+    //_productsList = SubscriptionManager.instance.currentProducts;
     //FirebaseLogger.logScreenView("paywall", widget.fromScreen);
   }
 
@@ -74,17 +78,17 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
   }
 
   void _initialize() async {
-    if (await _iap.isAvailable()) {
+    /*if (await _iap.isAvailable()) {
       _getPurchases();
     }
     _streamSubscription = _iap.purchaseUpdatedStream.listen((event) {
       _purchases.addAll(event);
       _verify();
-    });
+    });*/
   }
 
   void _getPurchases() async {
-    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+    /*QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
 
     for (PurchaseDetails purchase in response.pastPurchases) {
       final pending = Platform.isIOS
@@ -95,11 +99,11 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
         InAppPurchaseConnection.instance.completePurchase(purchase);
       }
     }
-    _purchases = response.pastPurchases;
+    _purchases = response.pastPurchases;*/
   }
 
   void _verify() async {
-    bool subscribed = false;
+    /*bool subscribed = false;
     for (PurchaseDetails purchase in _purchases) {
       if (purchase.status == PurchaseStatus.purchased) {
         subscribed = true;
@@ -112,7 +116,7 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
     }
     if (subscribed) {
       _onSuccessPurchase();
-    }
+    }*/
   }
 
   void _navigateToSpread(SpreadInfo info) {
@@ -128,10 +132,10 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
   }
 
   void _buy() async {
-    //FirebaseLogger.logClick("paywall_buy");
+    /*//FirebaseLogger.logClick("paywall_buy");
     final PurchaseParam param = PurchaseParam(
         productDetails: _productsList[_subscriptionIndex].productDetails);
-    _iap.buyNonConsumable(purchaseParam: param);
+    _iap.buyNonConsumable(purchaseParam: param);*/
   }
 
   void _setSubscription(int newIndex) {
@@ -142,11 +146,11 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
   }
 
   void _onClose() {
-    NavigationHelper.instance.onBackPressed();
+    _navigationHelper.onBackPressed();
   }
 
   void _onSuccessPurchase() {
-    SubscriptionManager.instance.changeSubscriptionStatus(true);
+    _subscriptionManager.changeSubscriptionStatus(true);
     if (widget.onSuccessPurchase != null) {
       Navigator.of(context).pop();
       widget.onSuccessPurchase!();
@@ -220,11 +224,11 @@ class _PayWallState extends BaseAdScreenState<PayWall> {
             ),
           ),
           SubscriptionRadios(
-            onBuy: _buy,
+              /*onBuy: _buy,
             products: _productsList,
             onChanged: _setSubscription,
-            subscriptionIndex: _subscriptionIndex,
-          ),
+            subscriptionIndex: _subscriptionIndex,*/
+              ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:tarot/models/saved_spread/saved_spread_info.dart';
 import 'package:tarot/providers/db_save_provider.dart';
@@ -20,6 +21,7 @@ class SaveSpreadFinalBloc {
       _value = value.toInt();
     });
   }
+  final SavedRepository _savedRepository = GetIt.I.get();
   final SavedSpreadInfo info;
   StreamController<Map<String, bool>> _labelsController = StreamController();
   Stream<Map<String, bool>> get labels => _labelsController.stream;
@@ -46,7 +48,7 @@ class SaveSpreadFinalBloc {
     );
     String labelResult = activeLabels.join(',');
     try {
-      await SavedRepository.instance.insertSpread(
+      await _savedRepository.insertSpread(
         SavedSpread(
             isCod ? 4 : info.spread!.spreadCategory,
             info.spread?.title,

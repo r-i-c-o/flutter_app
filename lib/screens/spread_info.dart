@@ -44,12 +44,7 @@ class SpreadInfoScreen extends StatelessWidget with PlanetScreenMixin {
     return Scaffold(
       body: Column(
         children: [
-          AppTopBar(
-            title: spread.title,
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
-          ),
+          AppTopBar(title: spread.title),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

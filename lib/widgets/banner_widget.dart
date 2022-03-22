@@ -1,6 +1,7 @@
+/*
 import 'package:flutter/material.dart';
 //import 'package:kado_analytics_module/ad_listeners.dart';
-import 'package:native_admob_flutter/native_admob_flutter.dart';
+//import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:tarot/helpers/ad_manager.dart';
 import 'package:tarot/helpers/subscription_manager.dart';
 
@@ -27,14 +28,17 @@ class _BannerWidgetState extends State<BannerWidget>
   void initState() {
     super.initState();
     _anim = AnimationController(vsync: this, duration: Duration());
-    /*_controller = KadoBannerAdListener(
+    */
+/*_controller = KadoBannerAdListener(
         //TODO add name
         name: "banner",
         loaded: () {
           _anim.forward();
         });
-    _controller.initController();*/
-    /*_ad = widget.huge
+    _controller.initController();*/ /*
+
+    */
+/*_ad = widget.huge
         ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: BannerAd(
@@ -47,7 +51,8 @@ class _BannerWidgetState extends State<BannerWidget>
             size: BannerSize.BANNER,
             unitId: AdManager.bannerAdUnitId,
             controller: _controller.controller,
-          );*/
+          );*/ /*
+
     _ad = SizedBox.shrink();
   }
 
@@ -85,3 +90,4 @@ class _BannerWidgetState extends State<BannerWidget>
     );
   }
 }
+*/

@@ -81,12 +81,7 @@ class _SingleCategoryCardsGridState
             duration: const Duration(seconds: 0),
             child: child,
           ),
-          child: AppTopBar(
-            title: widget.category.title,
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
-          ),
+          child: AppTopBar(title: widget.category.title),
         ),
       ),
       body: Padding(

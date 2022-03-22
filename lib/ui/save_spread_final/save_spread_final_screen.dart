@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/models/saved_spread/saved_spread_info.dart';
@@ -36,6 +37,7 @@ class SaveSpreadFinalScreen extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
+  final NavigationHelper _nav = GetIt.I.get();
   late final SaveSpreadFinalBloc bloc;
 
   final List<String> emotions = [
@@ -68,7 +70,7 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
   Future<List<ui.Image>> _getEmojisImages() async {
     final List<ui.Image> emojis = [];
     for (int i = 0; i < 3; i++) {
-      final image = (await rootBundle.load('assets/images/emotions/$i.png'));
+      final image = await rootBundle.load('assets/images/emotions/$i.png');
       final codec = await ui.instantiateImageCodec(image.buffer.asUint8List(),
           targetWidth: 32, targetHeight: 32);
       final frameInfo = await codec.getNextFrame();
@@ -91,9 +93,6 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
           AppTopBar(
             shrink: true,
             title: 'Save Reading',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
           ),
           Expanded(
             child: Padding(
@@ -208,7 +207,7 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
               if (result) {
                 Navigator.of(context).popUntil((route) =>
                     route.settings.name == CardDescriptionScreen.routeName);
-                NavigationHelper.instance.bottomNavigationClick(3);
+                _nav.bottomNavigationClick(3);
                 Provider.of<AdTabController>(context, listen: false).index = 3;
               }
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 //import 'package:kado_analytics_module/buttons.dart';
 //import 'package:kado_analytics_module/events/widget_events.dart';
 import 'package:provider/provider.dart';
@@ -62,10 +63,11 @@ class _SettingsSwitchTileState extends State<SettingsSwitchTile>
   void _setEnabled(bool value) async {
     await provider.setEnabledNotifications(value);
     if (value)
-      await NotificationManager.instance
+      await GetIt.I
+          .get<NotificationManager>()
           .enableNotifications(provider.notifications);
     else
-      await NotificationManager.instance.cancelNotifications();
+      await GetIt.I.get<NotificationManager>().cancelNotifications();
     setState(() {
       expanded = value;
     });
@@ -115,7 +117,8 @@ class _SettingsSwitchTileState extends State<SettingsSwitchTile>
   void _setNewNotifications() async {
     _times.sort((a, b) => a.compareTo(b));
     await provider.setNotifications(_times);
-    await NotificationManager.instance
+    await GetIt.I
+        .get<NotificationManager>()
         .enableNotifications(provider.notifications);
   }
 

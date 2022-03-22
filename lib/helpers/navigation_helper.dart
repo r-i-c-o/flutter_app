@@ -6,13 +6,6 @@ import 'package:tarot/ui/handbook/handbook_screen.dart';
 import 'package:tarot/ui/journal/journal_list_screen.dart';
 
 class NavigationHelper {
-  static NavigationHelper? _instance;
-  NavigationHelper._();
-  static NavigationHelper get instance {
-    _instance ??= NavigationHelper._();
-    return _instance!;
-  }
-
   static List<String> _bottomNavigationMainRoutes = [
     CardOfDayScreen.routeName,
     ChooseSpreadScreen.routeName,
@@ -38,9 +31,8 @@ class NavigationHelper {
       _tabNavigationKeys[index];
 
   void bottomNavigationClick(int i) {
-    if (i == NavigationHelper.instance.currentIndex)
-      NavigationHelper.instance.onBottomBarDoubleClick();
-    NavigationHelper.instance.currentIndex = i;
+    if (i == currentIndex) onBottomBarDoubleClick();
+    currentIndex = i;
   }
 
   void onBottomBarDoubleClick() {

@@ -1,6 +1,7 @@
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:get_it/get_it.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:kado_analytics_module/ad_listeners.dart';
 import 'package:tarot/helpers/ad_manager.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
@@ -41,13 +42,16 @@ class ChooseSpreadScreen extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
+  SubscriptionRepository _subscriptionManager =
+      GetIt.I.get<SubscriptionRepository>();
+
   List<List<Spread>> spreads = [
     dailySpreads,
     loveSpreads,
     careerSpreads,
     spiritSpreads,
   ];
-  RewardedAd? _rewardedAd;
+  //RewardedAd? _rewardedAd;
   //late KadoRewardedListener listener;
   int _numRewardedLoadAttempts = 0;
 
@@ -88,14 +92,14 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
         _loadRewarded();
       },
     );*/
-    if (!SubscriptionManager.instance.subscribed) {
+    if (!_subscriptionManager.subscribed) {
       _loadRewarded();
     }
   }
 
   @override
   void dispose() {
-    _rewardedAd?.dispose();
+    //_rewardedAd?.dispose();
     super.dispose();
   }
 
@@ -108,7 +112,7 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
   }
 
   void _showRewarded() {
-    if (_rewardedAd == null) return;
+    //if (_rewardedAd == null) return;
     /*_rewardedAd?.fullScreenContentCallback = listener.fullScreenCallback;
     _rewardedAd?.show(
       onUserEarnedReward: (ad, reward) {
@@ -116,13 +120,12 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
         _navigateToSpread();
       },
     );*/
-    _rewardedAd = null;
+    //_rewardedAd = null;
   }
 
   void _showSubscribePopoutOrNavigateToSpread() async {
     final topPadding = MediaQuery.of(context).padding.top;
-    if (!SubscriptionManager.instance.subscribed &&
-        _spreadToNavigate!.premium) {
+    if (!_subscriptionManager.subscribed && _spreadToNavigate!.premium) {
       //FirebaseLogger.logPremiumPopupOpened();
       showModalBottomSheet(
         backgroundColor: Colors.black.withOpacity(0.75),
@@ -185,9 +188,6 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
             AppTopBar(
               shrink: true,
               title: 'Category',
-              onLeadingPressed: () {
-                NavigationHelper.instance.onBackPressed();
-              },
             ),
             Expanded(
               child: Stack(

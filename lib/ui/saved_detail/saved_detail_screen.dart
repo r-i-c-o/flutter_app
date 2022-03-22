@@ -69,18 +69,18 @@ class _SavedDetailScreenState extends BaseAdScreenState<SavedDetailScreen> {
   @override
   void createOnAdClosed(Function callback) async {
     onAdClosed = callback;
-    if (interstitialAd == null) {
-      onAdClosed!();
-      return;
-    }
-    if (!SubscriptionManager.instance.subscribed && _adCounter != 0) {
+    //if (interstitialAd == null) {
+    onAdClosed!();
+    //  return;
+    //}
+    /*if (!SubscriptionManager.instance.subscribed && _adCounter != 0) {
       //interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
       interstitialAd?.show();
       interstitialAd = null;
       _adCounter--;
     } else {
       onAdClosed!();
-    }
+    }*/
   }
 
   @override
@@ -102,9 +102,6 @@ class _SavedDetailContainer extends InheritedWidget {
                   AppTopBar(
                     shrink: true,
                     title: 'My Journal',
-                    onLeadingPressed: () {
-                      NavigationHelper.instance.onBackPressed();
-                    },
                   ),
                   SizedBox(
                     height: 250.0,

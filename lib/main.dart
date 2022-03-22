@@ -6,9 +6,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart' as gms;
-import 'package:native_admob_flutter/native_admob_flutter.dart' as nativeads;
+import 'package:tarot/app_module.dart';
+//import 'package:google_mobile_ads/google_mobile_ads.dart' as gms;
+//import 'package:native_admob_flutter/native_admob_flutter.dart' as nativeads;
 import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/helpers/notifications_manager.dart';
 import 'package:tarot/helpers/remote_config.dart';
@@ -24,24 +26,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   AdManager.setTestMode();
-  _initAdMob();
-  nativeads.MobileAds.initialize();
+  //await gms.MobileAds.instance.initialize();
+  //nativeads.MobileAds.initialize();
 
   //await Firebase.initializeApp();
   //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-  await SharedPreferencesManager.instance.init();
-  await NotificationManager.instance.init();
-  NavigationHelper.instance;
-  SavedRepository.instance;
-
-  SubscriptionManager.instance.init();
+  getIt.registerSingletonAsync(() async => SharedPreferencesManager().init());
+  getIt.registerSingletonAsync(() async => NotificationManager().init());
+  getIt.registerSingleton(NavigationHelper());
+  getIt.registerSingletonAsync(() async => SavedRepository().init());
+  getIt.registerSingletonAsync(() async => SubscriptionRepository().init());
 
   runApp(MyApp());
-}
-
-Future<void> _initAdMob() {
-  return gms.MobileAds.instance.initialize();
 }
 
 class MyApp extends StatelessWidget {
@@ -67,7 +64,14 @@ class MyApp extends StatelessWidget {
       theme: theme.copyWith(
         textTheme: GoogleFonts.poppinsTextTheme(theme.textTheme),
       ),
-      home: AppContainer(),
+      home: FutureBuilder(
+          future: getIt.allReady(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData)
+              return AppContainer();
+            else
+              return Container();
+          }),
     );
   }
 }

@@ -1,12 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesManager {
-  static SharedPreferencesManager? _instance;
-  static SharedPreferencesManager get instance {
-    _instance ??= SharedPreferencesManager._();
-    return _instance!;
-  }
-
   static const String textSizeKey = 'text_size';
   static const String userNameKey = 'username';
   static const String notificationsEnabledKey = 'notifications';
@@ -15,14 +9,13 @@ class SharedPreferencesManager {
   static const String cardOfDayUpdateDay = 'cod_day';
   static const String previousSubscriptionState = 'previous_subscription';
 
-  SharedPreferencesManager._();
-
   late SharedPreferences _prefs;
 
   SharedPreferences get prefs => _prefs;
 
-  Future<void> init() async {
+  Future<SharedPreferencesManager> init() async {
     _prefs = await SharedPreferences.getInstance();
+    return this;
   }
 
   void removeKey(String key) => _prefs.remove(key);

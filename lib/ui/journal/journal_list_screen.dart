@@ -54,15 +54,11 @@ class _JournalListScreenState extends State<JournalListScreen> {
         AppTopBar(
           shrink: true,
           title: 'My Journal',
-          onLeadingPressed: () {
-            NavigationHelper.instance.onBackPressed();
-          },
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: StreamBuilder<bool>(
               stream: bloc.buttonMode,
-              //stream: JournalButtonStream.instance.buttonMode,
               initialData: true,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

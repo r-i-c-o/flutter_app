@@ -1,28 +1,18 @@
+import 'package:get_it/get_it.dart';
 import 'package:tarot/helpers/subscription_manager.dart';
 import 'package:tarot/saved_db/saved_dao.dart';
 import 'package:tarot/saved_db/saved_database.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 
 class SavedRepository {
-  static SavedRepository? _instance;
-  static SavedRepository get instance {
-    _instance ??= SavedRepository._();
-    return _instance!;
-  }
-
-  SavedRepository._() {
-    _init();
-  }
-  void _init() async {
-    _database = await $FloorSavedDatabase.databaseBuilder('saved.db').build();
-    _dao = _database.dao;
+  Future<SavedRepository> init() async {
+    SavedDatabase db =
+        await $FloorSavedDatabase.databaseBuilder('saved.db').build();
+    _dao = db.dao;
     spreadStream = _dao.getSaved();
-    spreadStream.listen((event) {
-      print('SAVED SPREAD $event');
-    });
+    return this;
   }
 
-  late final SavedDatabase _database;
   late final SavedDao _dao;
 
   late final Stream<List<SavedSpread>> spreadStream;
@@ -43,7 +33,7 @@ class SavedRepository {
             .toList() ??
         [];
     final bool limitExceeded = savedFiltered.length >= 3;
-    final bool subscribed = SubscriptionManager.instance.subscribed;
+    final bool subscribed = GetIt.I.get<SubscriptionRepository>().subscribed;
     return subscribed || !limitExceeded;
   }
 }

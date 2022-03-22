@@ -20,7 +20,7 @@ class SaveSpreadScreen extends StatefulWidget with PlanetScreenMixin {
   final List<SavedCard> savedCards;
   final String? question;
 
-  SaveSpreadScreen(
+  const SaveSpreadScreen(
       {Key? key, this.spread, required this.savedCards, this.question})
       : super(key: key);
 
@@ -54,9 +54,6 @@ class _SaveSpreadScreenState extends State<SaveSpreadScreen> {
           AppTopBar(
             shrink: true,
             title: 'Save Reading',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
           ),
           Expanded(
             child: SingleChildScrollView(

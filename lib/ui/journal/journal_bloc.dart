@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/streams.dart';
 import 'package:tarot/saved_db/saved_repository.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
@@ -7,6 +8,7 @@ import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'journal_button_stream.dart';
 
 class JournalBloc {
+  final SavedRepository _savedRepository = GetIt.I.get();
   late final Stream<bool> _updateList;
 
   late final Stream<bool> _buttonMode;
@@ -21,15 +23,13 @@ class JournalBloc {
     _updateList = journalButtonStream.updateStream;
     _buttonMode.listen((event) {});
     _updateList.listen((event) {});
-    savedList =
-        CombineLatestStream.combine2<bool, bool, Future<List<SavedSpread>>>(
-            _buttonMode, _updateList, (isCod, _) async {
-      final list = await SavedRepository.instance.getAllSpreads();
-      return list == null
-          ? []
-          : list
-              .where((element) => (element.spreadType == 4) == isCod)
-              .toList();
+    savedList = CombineLatestStream.combine2(_buttonMode, _updateList,
+        (isCod, _) async {
+      final list = await _savedRepository.getAllSpreads();
+      return list
+              ?.where((element) => (element.spreadType == 4) == isCod)
+              .toList() ??
+          [];
     });
   }
 

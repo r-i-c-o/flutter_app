@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:tarot/helpers/shared_preferences_manager.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
@@ -25,6 +26,7 @@ class UsernameScreen extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _UsernameScreenState extends State<UsernameScreen> {
+  SharedPreferencesManager _prefs = GetIt.I.get<SharedPreferencesManager>();
   String username = "";
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Username should not be empty')));
                     } else {
-                      SharedPreferencesManager.instance.prefs.setString(
+                      _prefs.prefs.setString(
                           SharedPreferencesManager.userNameKey, username);
                       Navigator.of(context).pushReplacementNamed(
                         OnBoarding.routeName,

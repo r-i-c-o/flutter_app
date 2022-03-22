@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/helpers/shared_preferences_manager.dart';
 
 class SharedPreferencesProvider with ChangeNotifier {
-  SharedPreferences _prefs = SharedPreferencesManager.instance.prefs;
+  SharedPreferences _prefs = providePrefs().prefs;
 
   TextSize get textSize =>
       TextSize(_prefs.getInt(SharedPreferencesManager.textSizeKey) ?? 0);

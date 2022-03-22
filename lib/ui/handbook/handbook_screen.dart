@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tarot/helpers/card_faces_directory.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
@@ -24,8 +25,12 @@ import 'package:tarot/widgets/gradient_blur.dart';
 import 'package:tarot/widgets/gradient_inner_shadow.dart';
 
 class HandBookScreen extends StatelessWidget with PlanetScreenMixin {
+  HandBookScreen({Key? key})
+      : nav = GetIt.I.get<NavigationHelper>(),
+        super(key: key);
+
+  final NavigationHelper nav;
   static const String routeName = '/handbook';
-  const HandBookScreen({Key? key}) : super(key: key);
 
   @override
   PlanetOffset? get planetOne => handbook_1;
@@ -70,7 +75,7 @@ class HandBookScreen extends StatelessWidget with PlanetScreenMixin {
                 child: IconButton(
                   icon: Icon(Icons.arrow_back_ios_rounded),
                   onPressed: () {
-                    NavigationHelper.instance.onBackPressed();
+                    nav.onBackPressed();
                   },
                 ),
               ),

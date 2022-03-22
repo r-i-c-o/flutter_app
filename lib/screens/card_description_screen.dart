@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:tarot/helpers/card_faces_directory.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
@@ -60,6 +61,7 @@ class CardDescriptionScreen extends StatefulWidget with PlanetScreenMixin {
 
 class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
   late ScrollController _controller;
+  SavedRepository _savedRepository = GetIt.I.get<SavedRepository>();
 
   @override
   void initState() {
@@ -140,9 +142,6 @@ class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
           ),
           child: AppTopBar(
             title: widget.title ?? 'Card of Day',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
             shrink: true,
           ),
         ),
@@ -281,7 +280,7 @@ class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
         },
         child: InkWell(
           onTap: () async {
-            if (!await SavedRepository.instance.canSaveSpread(isCardOfDay)) {
+            if (!await _savedRepository.canSaveSpread(isCardOfDay)) {
               _showLimitExceededDialog();
             } else
               _navigateToSaveSpread();

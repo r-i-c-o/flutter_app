@@ -85,9 +85,6 @@ class _SavedCardDescriptionScreenState
           ),
           child: AppTopBar(
             title: widget.title ?? 'Card of Day',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
             shrink: true,
           ),
         ),

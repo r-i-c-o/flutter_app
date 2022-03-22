@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/models/spread.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
@@ -8,10 +7,11 @@ import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
 import 'package:tarot/screens/choose_spread_screen.dart';
 import 'package:tarot/theme/app_colors.dart';
-import 'package:tarot/ui/tarot_reading/tarot_reading_screen.dart';
 import 'package:tarot/widgets/appbar.dart';
 import 'package:tarot/widgets/gradient_inner_shadow.dart';
 import 'package:tarot/widgets/tarot_button.dart';
+
+import 'spread_render_object.dart';
 
 class TarotQuestion extends StatefulWidget with PlanetScreenMixin {
   static const String routeName = '/tarotQuestion';
@@ -39,12 +39,7 @@ class _TarotQuestionState extends State<TarotQuestion> {
     return Scaffold(
       body: Column(
         children: [
-          AppTopBar(
-            title: widget.spread.title,
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
-          ),
+          AppTopBar(title: widget.spread.title),
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -87,7 +82,7 @@ class _TarotQuestionState extends State<TarotQuestion> {
                         await Future.delayed(Duration(milliseconds: 500));
                         Navigator.of(context).pushAndRemoveUntil(
                           PlanetMaterialPageRoute(
-                            widget: TarotReadingScreen(
+                            widget: TarotScreen(
                               spread: widget.spread,
                               question: question,
                             ),

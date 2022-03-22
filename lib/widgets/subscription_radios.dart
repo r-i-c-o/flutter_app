@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'gradient_blur.dart';
 
 class SubscriptionRadios extends StatelessWidget {
-  final VoidCallback onBuy;
+  /*final VoidCallback onBuy;
   final List<ProductWrapper> products;
   final Function onChanged;
   final int subscriptionIndex;
@@ -17,9 +17,9 @@ class SubscriptionRadios extends StatelessWidget {
     required this.products,
     required this.onChanged,
     required this.subscriptionIndex,
-  }) : super(key: key);
+  }) : super(key: key);*/
 
-  List<Widget> _generateSubscriptions() {
+  /*List<Widget> _generateSubscriptions() {
     return List<Widget>.generate(
       products.length,
       (index) {
@@ -33,11 +33,12 @@ class SubscriptionRadios extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    final isSpecial = products.length == 1;
+    return Container();
+/*    final isSpecial = products.length == 1;
     final premiumText = isSpecial ? 'TRY PREMIUM FOR FREE' : 'TRY PREMIUM';
     final premiumDescriptionText = isSpecial
         ? 'Unlock all Premium features and remove ads only for ${products.first.info.label}'
@@ -127,6 +128,6 @@ class SubscriptionRadios extends StatelessWidget {
           ),
         ),
       ),
-    );
+    );*/
   }
 }

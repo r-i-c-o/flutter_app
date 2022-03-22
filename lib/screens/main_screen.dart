@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
@@ -24,7 +25,7 @@ class MainScreen extends StatelessWidget with PlanetScreenMixin {
 
   void _navigateTo(int page, BuildContext context) async {
     //FirebaseLogger.logScreenView("main $page", null);
-    NavigationHelper.instance.currentIndex = page;
+    GetIt.I.get<NavigationHelper>().currentIndex = page;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => BottomNavScreen(initialPageIndex: page),

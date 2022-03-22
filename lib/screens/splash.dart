@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:tarot/helpers/ad_manager.dart';
 import 'package:tarot/helpers/shared_preferences_manager.dart';
 import 'package:tarot/helpers/subscription_manager.dart';
@@ -27,6 +28,7 @@ class Splash extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _SplashState extends BaseAdScreenState<Splash> {
+  SharedPreferencesManager _prefs = GetIt.I.get<SharedPreferencesManager>();
   bool _ready = false;
 
   _SplashState(String interstitialAdUnitId) : super(interstitialAdUnitId);
@@ -45,9 +47,8 @@ class _SplashState extends BaseAdScreenState<Splash> {
   }
 
   void _navigate() async {
-    final hasUsername = SharedPreferencesManager.instance.prefs
-            .getString(SharedPreferencesManager.userNameKey) !=
-        null;
+    final hasUsername =
+        _prefs.prefs.getString(SharedPreferencesManager.userNameKey) != null;
     await Future.delayed(const Duration(milliseconds: 300));
     Navigator.of(context).pushReplacementNamed(
         hasUsername ? MainScreen.routeName : UsernameScreen.routeName);

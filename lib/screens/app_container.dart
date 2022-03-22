@@ -1,8 +1,10 @@
 //import 'package:firebase_analytics/firebase_analytics.dart';
 //import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 //import 'package:kado_analytics_module/observer.dart';
 import 'package:provider/provider.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/planets/planet_observer.dart';
 import 'package:tarot/planets/planet_page_route.dart';
@@ -50,7 +52,7 @@ class MainPopScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => NavigationHelper.instance.onBackPressed(),
+      onWillPop: () => provideNavHelper().onBackPressed(),
       child: MainNavigator(),
     );
   }
@@ -62,7 +64,7 @@ class MainNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: NavigationHelper.instance.mainNavigatorKey,
+      key: provideNavHelper().mainNavigatorKey,
       observers: [
         PlanetObserver(Provider.of<PlanetsProvider>(context, listen: false)),
         //FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),

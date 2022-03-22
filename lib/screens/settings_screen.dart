@@ -30,9 +30,6 @@ class SettingsScreen extends StatelessWidget with PlanetScreenMixin {
             AppTopBar(
               shrink: true,
               title: 'Settings',
-              onLeadingPressed: () {
-                NavigationHelper.instance.onBackPressed();
-              },
             ),
             SettingsSwitchTile(),
             SettingsTextSizeAnimated(),

@@ -97,9 +97,6 @@ class _HandbookCardDescriptionState extends State<HandbookCardDescription>
           ),
           child: AppTopBar(
             title: 'Card Description',
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
             shrink: true,
           ),
         ),

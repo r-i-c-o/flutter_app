@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tarot/widgets/banner_widget.dart';
+//import 'package:tarot/widgets/banner_widget.dart';
 
 class AdTabScaffold extends StatefulWidget {
   final CupertinoTabBar tabBar;
@@ -48,7 +48,7 @@ class _AdTabScaffoldState extends State<AdTabScaffold> {
                 ),
               ),
             ),
-            BannerWidget(),
+            //BannerWidget(),
             Consumer<AdTabController>(
               builder: (context, value, child) => widget.tabBar.copyWith(
                 currentIndex: _controller.index,

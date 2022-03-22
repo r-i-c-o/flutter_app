@@ -2,6 +2,7 @@
 //import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 //import 'package:kado_analytics_module/kado_analytics_module.dart';
 import 'package:provider/provider.dart';
 import 'package:tarot/helpers/navigation_helper.dart';
@@ -36,6 +37,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   ];
 
   List<PlanetObserver> _observers = [];
+  NavigationHelper _navigationHelper = GetIt.I.get<NavigationHelper>();
 
   @override
   void didChangeDependencies() {
@@ -54,7 +56,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     return AdTabScaffold(
       tabBar: CupertinoTabBar(
         onTap: (i) {
-          NavigationHelper.instance.bottomNavigationClick(i);
+          _navigationHelper.bottomNavigationClick(i);
           _observers[i].notifyProvider();
         },
         currentIndex: widget.initialPageIndex,
@@ -111,7 +113,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       tabBuilder: (context, index) {
         PlanetScreenMixin route = routes[index];
         return CupertinoTabView(
-          navigatorKey: NavigationHelper.instance.tabNavigatorByIndex(index),
+          navigatorKey: _navigationHelper.tabNavigatorByIndex(index),
           navigatorObservers: [
             _observers[index],
             //FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),

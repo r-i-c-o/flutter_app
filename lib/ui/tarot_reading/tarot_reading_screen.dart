@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tarot/helpers/ad_manager.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/helpers/subscription_manager.dart';
 import 'package:tarot/models/daily_spreads.dart';
 import 'package:tarot/models/spread.dart';
 import 'package:tarot/models/tarot_card.dart';
@@ -84,17 +82,17 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
   @override
   void createOnAdClosed(Function callback) async {
     onAdClosed = callback;
-    if (interstitialAd == null) {
-      onAdClosed!();
-      return;
-    }
-    if (!SubscriptionManager.instance.subscribed && _adCounter != 0) {
-      //interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
-      interstitialAd?.show();
-      interstitialAd = null;
-      _adCounter--;
-    } else
-      onAdClosed!();
+    //if (interstitialAd == null) {
+    onAdClosed!();
+    //  return;
+    //}
+    //if (!SubscriptionManager.instance.subscribed && _adCounter != 0) {
+    //  //interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
+    //  interstitialAd?.show();
+    //  interstitialAd = null;
+    //  _adCounter--;
+    //} else
+    //  onAdClosed!();
   }
 
   @override
@@ -102,12 +100,7 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
     return Scaffold(
       body: Column(
         children: [
-          AppTopBar(
-            title: widget.spread.title,
-            onLeadingPressed: () {
-              NavigationHelper.instance.onBackPressed();
-            },
-          ),
+          AppTopBar(title: widget.spread.title),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {

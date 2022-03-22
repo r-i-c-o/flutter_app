@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:apphud/apphud.dart';
+//import 'package:apphud/apphud.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:get_it/get_it.dart';
+import 'package:tarot/app_module.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:purchases_flutter/purchases_flutter.dart';
 //import 'package:tarot/helpers/firebase_logger.dart';
 import 'package:tarot/helpers/remote_config.dart';
 import 'package:tarot/helpers/subscription_manager.dart';
@@ -50,41 +52,42 @@ class OnBoarding1 extends StatefulWidget {
 }
 
 class _OnBoarding1State extends State<OnBoarding1> {
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
-  late StreamSubscription _streamSubscription;
+  SubscriptionRepository _subscriptionManager = provideSubscriptionRepository();
+  //InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  //late StreamSubscription _streamSubscription;
 
   int _subscriptionIndex = 0;
 
-  List<PurchaseDetails> _purchases = [];
+  //List<PurchaseDetails> _purchases = [];
   final ValueNotifier<int> _pageNotifier = ValueNotifier<int>(0);
 
-  List<ProductWrapper> _productsList = [];
+  //List<ProductWrapper> _productsList = [];
 
   @override
   void initState() {
     super.initState();
-    _productsList = SubscriptionManager.instance.currentProducts;
+    //_productsList = SubscriptionManager.instance.currentProducts;
     _initialize();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _streamSubscription.cancel();
+    //_streamSubscription.cancel();
   }
 
   void _initialize() async {
-    if (await _iap.isAvailable()) {
+    /*if (await _iap.isAvailable()) {
       _getPurchases();
     }
     _streamSubscription = _iap.purchaseUpdatedStream.listen((event) {
       _purchases.addAll(event);
       _verify();
-    });
+    });*/
   }
 
   void _getPurchases() async {
-    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
+    /*QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
 
     for (PurchaseDetails purchase in response.pastPurchases) {
       final pending = Platform.isIOS
@@ -95,7 +98,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
         InAppPurchaseConnection.instance.completePurchase(purchase);
       }
     }
-    _purchases = response.pastPurchases;
+    _purchases = response.pastPurchases;*/
   }
 
   void _setSubscription(int newIndex) {
@@ -105,7 +108,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
   }
 
   void _verify() async {
-    bool subscribed = false;
+    /*bool subscribed = false;
     for (PurchaseDetails purchase in _purchases) {
       if (purchase.status == PurchaseStatus.purchased) {
         subscribed = true;
@@ -119,7 +122,7 @@ class _OnBoarding1State extends State<OnBoarding1> {
     if (subscribed) {
       SubscriptionManager.instance.changeSubscriptionStatus(subscribed);
       _onClose();
-    }
+    }*/
   }
 
   void _onClose() {
@@ -129,10 +132,10 @@ class _OnBoarding1State extends State<OnBoarding1> {
   }
 
   void _buy() async {
-    if (SubscriptionManager.instance.subscribed) _onClose();
+    /*if (SubscriptionManager.instance.subscribed) _onClose();
     final PurchaseParam param = PurchaseParam(
         productDetails: _productsList[_subscriptionIndex].productDetails);
-    _iap.buyNonConsumable(purchaseParam: param);
+    _iap.buyNonConsumable(purchaseParam: param);*/
   }
 
   @override
@@ -170,11 +173,11 @@ class _OnBoarding1State extends State<OnBoarding1> {
           ),
         ),
         SubscriptionRadios(
-          onBuy: _buy,
+            /*onBuy: _buy,
           products: _productsList,
           onChanged: _setSubscription,
-          subscriptionIndex: _subscriptionIndex,
-        ),
+          subscriptionIndex: _subscriptionIndex,*/
+            ),
       ],
     );
   }

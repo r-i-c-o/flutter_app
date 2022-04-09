@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
+import 'package:tarot/repositories/navigation_helper.dart';
 import 'package:tarot/models/spread_categories_info.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/planets/default_positions.dart';
@@ -38,7 +38,7 @@ class _JournalListScreenState extends State<JournalListScreen> {
   @override
   void initState() {
     super.initState();
-    bloc = JournalBloc(JournalButtonStream.instance);
+    bloc = JournalBloc();
   }
 
   @override

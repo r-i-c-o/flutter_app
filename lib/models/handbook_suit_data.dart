@@ -1,5 +1,5 @@
-import 'package:tarot/models/cards.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/models/tarot_card/cards.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 
 class HandbookSuitData {
   final String title;

@@ -2,10 +2,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+//import 'package:tarot/repositories/firebase_logger.dart';
+import 'package:tarot/repositories/navigation_helper.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';

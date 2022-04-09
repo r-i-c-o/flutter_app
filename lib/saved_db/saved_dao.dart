@@ -8,7 +8,4 @@ abstract class SavedDao {
 
   @Query('SELECT * FROM saved')
   Future<List<SavedSpread>?> getSavedAmount();
-
-  @Query('SELECT * FROM saved')
-  Stream<List<SavedSpread>> getSaved();
 }

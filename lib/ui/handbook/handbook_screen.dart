@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/repositories/navigation_helper.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';

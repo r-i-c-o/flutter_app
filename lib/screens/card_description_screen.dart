@@ -2,24 +2,20 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/spread.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/app_module.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/models/spread/spread.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
-import 'package:tarot/providers/db_save_provider.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
-import 'package:tarot/saved_db/saved_repository.dart';
-import 'package:tarot/screens/pay_wall.dart';
+import 'package:tarot/repositories/saved_repository.dart';
+import 'package:tarot/ui/paywall/pay_wall.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/ui/save_spread/save_spread_screen.dart';
-import 'package:tarot/widgets/appbar.dart';
+import 'package:tarot/widgets/animated_appbar.dart';
 import 'package:tarot/widgets/card_attribute_chip.dart';
 import 'package:tarot/widgets/save_limit_popup.dart';
 import 'package:tarot/widgets/text_splitted.dart';
@@ -30,7 +26,7 @@ class CardDescriptionScreen extends StatefulWidget with PlanetScreenMixin {
   final int tag;
   final String? title;
   final TarotCard card;
-  final Spread? spread;
+  final Spread spread;
   final List<SavedCard> savedCards;
   final String? question;
   final bool isYesOrNo;
@@ -40,7 +36,7 @@ class CardDescriptionScreen extends StatefulWidget with PlanetScreenMixin {
     required this.tag,
     this.title,
     required this.card,
-    this.spread,
+    required this.spread,
     required this.savedCards,
     this.question,
     this.isYesOrNo = false,
@@ -61,7 +57,7 @@ class CardDescriptionScreen extends StatefulWidget with PlanetScreenMixin {
 
 class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
   late ScrollController _controller;
-  SavedRepository _savedRepository = GetIt.I.get<SavedRepository>();
+  SavedRepository _savedRepository = provideSavedRepository();
 
   @override
   void initState() {
@@ -125,26 +121,12 @@ class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isCardOfDay = widget.spread == null;
+    bool isCardOfDay = widget.spread.isCardOfDay();
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 64.0),
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => Container(
-            color: Color(0xFF142431).withOpacity(
-              _controller.hasClients
-                  ? (_controller.offset / 50.0).clamp(0.0, 1.0).toDouble()
-                  : 0.0,
-            ),
-            child: child,
-          ),
-          child: AppTopBar(
-            title: widget.title ?? 'Card of Day',
-            shrink: true,
-          ),
-        ),
+      appBar: FadingAppBar(
+        title: widget.title ?? 'Card of Day',
+        controller: _controller,
       ),
       body: Stack(
         children: [
@@ -273,37 +255,42 @@ class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
           ),
         ],
       ),
-      floatingActionButton: Consumer<DBSaveProvider>(
-        builder: (context, value, child) {
-          if (isCardOfDay) return value.codSaved ? Container() : child!;
-          return value.spreadSaved ? Container() : child!;
-        },
-        child: InkWell(
-          onTap: () async {
-            if (!await _savedRepository.canSaveSpread(isCardOfDay)) {
-              _showLimitExceededDialog();
-            } else
-              _navigateToSaveSpread();
-          },
-          child: Container(
-            width: 48.0,
-            height: 48.0,
-            decoration: BoxDecoration(
-                color: AppColors.mainMenuListBackground,
-                border: Border.all(
-                  color: AppColors.colorAccent,
-                  width: 2.0,
+      floatingActionButton: StreamBuilder<bool>(
+        stream: isCardOfDay
+            ? _savedRepository.codSaved
+            : _savedRepository.spreadSaved,
+        builder: (context, snapshot) {
+          final saved = snapshot.data;
+          if (saved != null && !saved) {
+            return InkWell(
+              onTap: () async {
+                if (!await _savedRepository.canSaveSpread(isCardOfDay)) {
+                  _showLimitExceededDialog();
+                } else
+                  _navigateToSaveSpread();
+              },
+              child: Container(
+                width: 48.0,
+                height: 48.0,
+                decoration: BoxDecoration(
+                    color: AppColors.mainMenuListBackground,
+                    border: Border.all(
+                      color: AppColors.colorAccent,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(24.0))),
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/fab/save.png',
+                    width: 24.0,
+                    height: 24.0,
+                  ),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(24.0))),
-            child: Center(
-              child: Image.asset(
-                'assets/images/fab/save.png',
-                width: 24.0,
-                height: 24.0,
               ),
-            ),
-          ),
-        ),
+            );
+          }
+          return SizedBox.shrink();
+        },
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/models/career_spreads.dart';
-import 'package:tarot/models/daily_spreads.dart';
-import 'package:tarot/models/love_spreads.dart';
+import 'package:tarot/models/spread/career_spreads.dart';
+import 'package:tarot/models/spread/daily_spreads.dart';
+import 'package:tarot/models/spread/love_spreads.dart';
 import 'package:tarot/ui/handbook_articles/article_base.dart';
 import 'package:tarot/ui/handbook_articles/article_text_widgets.dart';
 import 'package:tarot/widgets/spread_list_item.dart';

@@ -1,30 +1,23 @@
 import 'dart:async';
 
-import 'package:get_it/get_it.dart';
-import 'package:rxdart/streams.dart';
-import 'package:tarot/saved_db/saved_repository.dart';
+import 'package:tarot/app_module.dart';
+import 'package:tarot/repositories/saved_repository.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 
-import 'journal_button_stream.dart';
-
 class JournalBloc {
-  final SavedRepository _savedRepository = GetIt.I.get();
-  late final Stream<bool> _updateList;
+  final SavedRepository _savedRepository = provideSavedRepository();
 
   late final Stream<bool> _buttonMode;
   Stream<bool> get buttonMode => _buttonMode;
 
   late Stream<Future<List<SavedSpread>>> savedList;
 
-  final JournalButtonStream journalButtonStream;
+  final journalButtonStream = provideJournalButtonStream();
 
-  JournalBloc(this.journalButtonStream) {
+  JournalBloc() {
     _buttonMode = journalButtonStream.buttonMode;
-    _updateList = journalButtonStream.updateStream;
-    _buttonMode.listen((event) {});
-    _updateList.listen((event) {});
-    savedList = CombineLatestStream.combine2(_buttonMode, _updateList,
-        (isCod, _) async {
+    _buttonMode.listen((isCod) {});
+    savedList = _buttonMode.map((isCod) async {
       final list = await _savedRepository.getAllSpreads();
       return list
               ?.where((element) => (element.spreadType == 4) == isCod)
@@ -33,9 +26,9 @@ class JournalBloc {
     });
   }
 
-  void getCardsOfDay() => journalButtonStream.getCardsOfDay();
+  void getCardsOfDay() => journalButtonStream.switchButtonMode(true);
 
-  void getSpreads() => journalButtonStream.getSpreads();
+  void getSpreads() => journalButtonStream.switchButtonMode(false);
 
   void dispose() {
     //_buttonModeController.close();

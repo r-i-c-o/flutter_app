@@ -2,18 +2,17 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/cards.dart';
-import 'package:tarot/models/cards_reverse.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/app_module.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/models/tarot_card/cards.dart';
+import 'package:tarot/models/tarot_card/cards_reverse.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
-import 'package:tarot/providers/shared_preferences_provider.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/appbar.dart';
+import 'package:tarot/widgets/auto_size_text.dart';
 import 'package:tarot/widgets/card_attribute_chip.dart';
 import 'package:tarot/widgets/tarot_button.dart';
 
@@ -40,6 +39,8 @@ class HandbookCardDescription extends StatefulWidget with PlanetScreenMixin {
 
 class _HandbookCardDescriptionState extends State<HandbookCardDescription>
     with SingleTickerProviderStateMixin {
+  final _settingsRepository = provideSettings();
+
   late ScrollController _controller;
   late AnimationController _animationController;
   bool _reversed = false;
@@ -180,14 +181,8 @@ class _HandbookCardDescriptionState extends State<HandbookCardDescription>
                                         CardAttributeChip(attribute: attribute))
                                     .toList(),
                               ),
-                              Consumer<SharedPreferencesProvider>(
-                                builder: (context, value, child) => Text(
-                                  cardToShow.interpretation.interpretation,
-                                  style: TextStyle(
-                                    color: AppColors.semiTransparentWhiteText,
-                                    fontSize: 14.0 + 5.0 * value.textSize.index,
-                                  ),
-                                ),
+                              AutoSizeText(
+                                text: cardToShow.interpretation.interpretation,
                               ),
                               SizedBox(
                                 height: 72.0,

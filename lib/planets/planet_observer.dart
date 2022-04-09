@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
-import 'package:tarot/providers/planets_provider.dart';
+import 'package:tarot/repositories/planets_provider.dart';
 
 class PlanetObserver extends NavigatorObserver {
-  final PlanetsProvider? provider;
-  PlanetObserver(this.provider);
+  final PlanetsProvider provider = providePlanets();
   Route? currentRoute;
 
   void notifyProvider() async {
@@ -14,7 +14,7 @@ class PlanetObserver extends NavigatorObserver {
       PlanetOffset? planetOne = route.planetOne;
       PlanetOffset? planetTwo = route.planetTwo;
       await Future.delayed(Duration.zero);
-      provider?.setPlanets(planetOne, planetTwo);
+      provider.setPlanets(planetOne, planetTwo);
     }
   }
 

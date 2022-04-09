@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';

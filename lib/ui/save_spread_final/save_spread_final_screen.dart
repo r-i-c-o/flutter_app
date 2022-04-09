@@ -2,9 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/models/saved_spread/saved_spread_info.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
@@ -37,34 +35,13 @@ class SaveSpreadFinalScreen extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
-  final NavigationHelper _nav = GetIt.I.get();
+  final _nav = provideNavHelper();
   late final SaveSpreadFinalBloc bloc;
-
-  final List<String> emotions = [
-    'Joy',
-    'Cheerfulness',
-    'Pleasure',
-    'Optimism',
-    'Hope',
-    'Pride',
-    'Triumph',
-    'Relief',
-    'Attraction',
-    'Love',
-    'Sadness',
-    'Disappointment',
-    'Shame',
-    'Suffering',
-    'Surprise',
-    'Fear',
-    'Anger',
-    'Irritation',
-  ]..shuffle();
 
   @override
   void initState() {
     super.initState();
-    bloc = SaveSpreadFinalBloc(widget.info, emotions);
+    bloc = SaveSpreadFinalBloc(widget.info);
   }
 
   Future<List<ui.Image>> _getEmojisImages() async {
@@ -106,9 +83,7 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          widget.info.spread != null
-                              ? widget.info.spread!.title
-                              : 'Card of Day',
+                          widget.info.spread.title,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 24.0,
@@ -172,23 +147,23 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
                           'What are the immediate emotion you feel with this reading?',
                           center: true,
                         ),
-                        StreamBuilder<Map<String, bool>>(
+                        StreamBuilder<List<Label>>(
                           stream: bloc.labels,
                           builder: (context, snapshot) {
-                            return Wrap(
-                              alignment: WrapAlignment.center,
-                              children: List.generate(
-                                emotions.length,
-                                (index) => TextChip(
-                                  label: emotions[index],
-                                  active:
-                                      snapshot.data?[emotions[index]] ?? false,
-                                  onTap: (label) {
-                                    bloc.onTap(label);
-                                  },
+                            final list = snapshot.data;
+                            if (list != null)
+                              return Wrap(
+                                alignment: WrapAlignment.center,
+                                children: List.generate(
+                                  list.length,
+                                  (index) => TextChip(
+                                    label: list[index],
+                                    index: index,
+                                    onTap: bloc.onTap,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            return SizedBox.shrink();
                           },
                         ),
                       ],
@@ -203,12 +178,12 @@ class _SaveSpreadFinalScreenState extends State<SaveSpreadFinalScreen> {
             color: AppColors.buttonColor,
             title: 'SAVE READING',
             onTap: () async {
-              final result = await bloc.saveSpread(context);
+              final result = await bloc.saveSpread();
               if (result) {
                 Navigator.of(context).popUntil((route) =>
                     route.settings.name == CardDescriptionScreen.routeName);
                 _nav.bottomNavigationClick(3);
-                Provider.of<AdTabController>(context, listen: false).index = 3;
+                AdTabScaffold.of(context)?.setPage(3);
               }
             },
           ),
@@ -248,30 +223,28 @@ class EmojiThumb extends SliderComponentShape {
 }
 
 class TextChip extends StatelessWidget {
-  final String label;
-  final bool active;
-  final Function(String) onTap;
+  final Label label;
+  final int index;
+  final Function(int) onTap;
   const TextChip(
-      {Key? key,
-      required this.label,
-      required this.active,
-      required this.onTap})
+      {Key? key, required this.label, required this.index, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onTap(label),
+      onTap: () => onTap(index),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
         decoration: BoxDecoration(
-          color:
-              active ? AppColors.buttonColor : AppColors.mainMenuListBackground,
+          color: label.active
+              ? AppColors.buttonColor
+              : AppColors.mainMenuListBackground,
           borderRadius: BorderRadius.circular(300.0),
         ),
         child: Text(
-          label.toUpperCase(),
+          label.label,
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,

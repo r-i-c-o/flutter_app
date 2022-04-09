@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/theme/app_colors.dart';
 
 import 'inner_shadow.dart';

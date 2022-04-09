@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
@@ -111,6 +110,8 @@ class _TarotRenderObject extends RenderBox {
 
   double wDeckCard = 0.0;
   double hDeckCard = 0.0;
+  double minY = 0.0;
+  double referencePosition = 0.0;
 
   _TarotRenderObject(this.deckCardImage);
 
@@ -119,15 +120,27 @@ class _TarotRenderObject extends RenderBox {
     size = constraints.biggest;
     hDeckCard = size.height * 0.5;
     wDeckCard = hDeckCard / 1.4;
+    minY = size.height * 0.6;
+    referencePosition = (size.width - wDeckCard) * 0.5;
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
-    paintImage(
-      canvas: canvas,
-      rect: Rect.fromLTWH(offset.dx, offset.dy, wDeckCard, hDeckCard),
-      image: deckCardImage,
-    );
+
+    for (int i = 0; i < 4; i++) {
+      canvas.save();
+      canvas.translate(wDeckCard * 0.5, hDeckCard * 0.5);
+      canvas.rotate(0.0005 * (wDeckCard * 0.5 * i - referencePosition));
+      canvas.translate(-wDeckCard * 0.5, -hDeckCard * 0.5);
+      paintImage(
+        canvas: canvas,
+        rect: Rect.fromLTWH(offset.dx + wDeckCard * 0.5 * i, offset.dy + minY,
+            wDeckCard, hDeckCard),
+        image: deckCardImage,
+        isAntiAlias: true,
+      );
+      canvas.restore();
+    }
   }
 }

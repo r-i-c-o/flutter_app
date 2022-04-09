@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 //import 'package:kado_analytics_module/buttons.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
+//import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/planets/planet_page_route.dart';
-import 'package:tarot/screens/pay_wall.dart';
+import 'package:tarot/ui/paywall/pay_wall.dart';
 import 'package:tarot/widgets/gradient_blur.dart';
 import 'package:tarot/widgets/tarot_button.dart';
 

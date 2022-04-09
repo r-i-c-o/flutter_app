@@ -1,9 +1,9 @@
 /*
 import 'package:flutter/material.dart';
-//import 'package:kado_analytics_module/ad_listeners.dart';
-//import 'package:native_admob_flutter/native_admob_flutter.dart';
-import 'package:tarot/helpers/ad_manager.dart';
-import 'package:tarot/helpers/subscription_manager.dart';
+import 'package:kado_analytics_module/ad_listeners.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
+import 'package:tarot/app_module.dart';
+import 'package:tarot/repositories/ad_manager.dart';
 
 class BannerWidget extends StatefulWidget {
   final bool huge;
@@ -20,7 +20,8 @@ class BannerWidget extends StatefulWidget {
 
 class _BannerWidgetState extends State<BannerWidget>
     with SingleTickerProviderStateMixin {
-  //late final KadoBannerAdListener _controller;
+  final _subscriptionsRepository = provideSubscriptionRepository();
+  late final KadoBannerAdListener _controller;
   late final AnimationController _anim;
   late Widget _ad;
 
@@ -28,17 +29,14 @@ class _BannerWidgetState extends State<BannerWidget>
   void initState() {
     super.initState();
     _anim = AnimationController(vsync: this, duration: Duration());
-    */
-/*_controller = KadoBannerAdListener(
+    _controller = KadoBannerAdListener(
         //TODO add name
         name: "banner",
         loaded: () {
           _anim.forward();
         });
-    _controller.initController();*/ /*
-
-    */
-/*_ad = widget.huge
+    _controller.initController();
+    _ad = widget.huge
         ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: BannerAd(
@@ -51,41 +49,30 @@ class _BannerWidgetState extends State<BannerWidget>
             size: BannerSize.BANNER,
             unitId: AdManager.bannerAdUnitId,
             controller: _controller.controller,
-          );*/ /*
-
-    _ad = SizedBox.shrink();
+          );
   }
 
   @override
   void dispose() {
-    //_controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: SubscriptionManager.instance.subscriptionStream,
+      stream: _subscriptionsRepository.subscriptionStream,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final subscribed = snapshot.data;
-          if (subscribed != null) {
-            return subscribed
-                ? Container()
-                : SizeTransition(
-                    sizeFactor: _anim,
-                    child: Container(
-                      child: _ad,
-                    ),
-                  );
-          }
-        }
-        return SizeTransition(
+        final ad = SizeTransition(
           sizeFactor: _anim,
           child: Container(
             child: _ad,
           ),
         );
+        if (snapshot.data == true) {
+          return SizedBox.shrink();
+        }
+        return ad;
       },
     );
   }

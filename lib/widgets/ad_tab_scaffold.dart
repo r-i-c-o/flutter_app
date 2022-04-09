@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-//import 'package:tarot/widgets/banner_widget.dart';
+
+import 'banner_widget.dart';
 
 class AdTabScaffold extends StatefulWidget {
   final CupertinoTabBar tabBar;
@@ -15,15 +14,21 @@ class AdTabScaffold extends StatefulWidget {
   }) : super(key: key);
   @override
   _AdTabScaffoldState createState() => _AdTabScaffoldState();
+
+  static _AdTabScaffoldState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_AdTabScaffoldState>();
+  }
 }
 
 class _AdTabScaffoldState extends State<AdTabScaffold> {
-  late AdTabController _controller;
+  late final ValueNotifier<int> _controller;
+
+  void setPage(int index) => _controller.value = index;
 
   @override
   void initState() {
     super.initState();
-    _controller = AdTabController(initialIndex: widget.tabBar.currentIndex);
+    _controller = ValueNotifier(widget.tabBar.currentIndex);
   }
 
   @override
@@ -34,32 +39,31 @@ class _AdTabScaffoldState extends State<AdTabScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _controller,
-      child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: Consumer<AdTabController>(
-                builder: (context, value, child) => _TabSwitchingView(
-                  currentTabIndex: _controller.index,
-                  tabCount: widget.tabBar.items.length,
-                  tabBuilder: widget.tabBuilder,
-                ),
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: ValueListenableBuilder<int>(
+              valueListenable: _controller,
+              builder: (_, value, __) => _TabSwitchingView(
+                currentTabIndex: value,
+                tabCount: widget.tabBar.items.length,
+                tabBuilder: widget.tabBuilder,
               ),
             ),
-            //BannerWidget(),
-            Consumer<AdTabController>(
-              builder: (context, value, child) => widget.tabBar.copyWith(
-                currentIndex: _controller.index,
-                onTap: (int newIndex) {
-                  _controller.index = newIndex;
-                  widget.tabBar.onTap?.call(newIndex);
-                },
-              ),
+          ),
+          //BannerWidget(),
+          ValueListenableBuilder<int>(
+            valueListenable: _controller,
+            builder: (_, value, __) => widget.tabBar.copyWith(
+              currentIndex: value,
+              onTap: (int newIndex) {
+                _controller.value = newIndex;
+                widget.tabBar.onTap?.call(newIndex);
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -70,9 +74,7 @@ class _TabSwitchingView extends StatefulWidget {
     required this.currentTabIndex,
     required this.tabCount,
     required this.tabBuilder,
-  })  : assert(currentTabIndex != null),
-        assert(tabCount != null && tabCount > 0),
-        assert(tabBuilder != null);
+  }) : assert(tabCount > 0);
 
   final int currentTabIndex;
   final int tabCount;
@@ -168,25 +170,5 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
         );
       }),
     );
-  }
-}
-
-class AdTabController extends ChangeNotifier {
-  AdTabController({int initialIndex = 0}) : _index = initialIndex;
-
-  int get index => _index;
-  int _index;
-  set index(int value) {
-    if (_index == value) {
-      return;
-    }
-    _index = value;
-    notifyListeners();
-  }
-
-  @mustCallSuper
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

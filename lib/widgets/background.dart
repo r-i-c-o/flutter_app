@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/planets/planet_position.dart';
-import 'package:tarot/providers/planets_provider.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/rotating_planet.dart';
 
@@ -24,45 +23,49 @@ class Background extends StatelessWidget {
             repeat: ImageRepeat.repeat,
           ),
         ),
-        Consumer<PlanetsProvider>(
-          builder: (_, value, child) {
-            PlanetPosition planet1 = value.planet1Position;
-            return AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              top: planet1.top,
-              left: planet1.left,
-              bottom: planet1.bottom,
-              right: planet1.right,
-              child: child!,
-            );
+        StreamBuilder<PlanetPosition>(
+          stream: providePlanets().planet1,
+          builder: (context, snapshot) {
+            final planet = snapshot.data;
+            if (planet != null)
+              return AnimatedPositioned(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                top: planet.top,
+                left: planet.left,
+                bottom: planet.bottom,
+                right: planet.right,
+                child: RotatingPlanet(
+                  child: Image.asset(
+                    'assets/images/planet1.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              );
+            return SizedBox.shrink();
           },
-          child: RotatingPlanet(
-            child: Image.asset(
-              'assets/images/planet1.png',
-              fit: BoxFit.contain,
-            ),
-          ),
         ),
-        Consumer<PlanetsProvider>(
-          builder: (_, value, child) {
-            PlanetPosition planet2 = value.planet2Position;
-            return AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              top: planet2.top,
-              left: planet2.left,
-              bottom: planet2.bottom,
-              right: planet2.right,
-              child: child!,
-            );
+        StreamBuilder<PlanetPosition>(
+          stream: providePlanets().planet2,
+          builder: (context, snapshot) {
+            final planet = snapshot.data;
+            if (planet != null)
+              return AnimatedPositioned(
+                duration: Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                top: planet.top,
+                left: planet.left,
+                bottom: planet.bottom,
+                right: planet.right,
+                child: RotatingPlanet(
+                  child: Image.asset(
+                    'assets/images/planet2.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              );
+            return SizedBox.shrink();
           },
-          child: RotatingPlanet(
-            child: Image.asset(
-              'assets/images/planet2.png',
-              fit: BoxFit.contain,
-            ),
-          ),
         ),
         Positioned.fill(
           child: DecoratedBox(

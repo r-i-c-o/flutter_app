@@ -2,72 +2,74 @@ import 'dart:async';
 import 'dart:convert';
 
 //import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:tarot/app_module.dart';
 import 'package:tarot/models/saved_spread/saved_spread_info.dart';
-import 'package:tarot/providers/db_save_provider.dart';
-import 'package:tarot/saved_db/saved_repository.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
-import 'package:rxdart/streams.dart';
-import 'package:tarot/ui/journal/journal_button_stream.dart';
 
 class SaveSpreadFinalBloc {
-  SaveSpreadFinalBloc(this.info, List<String> labels) {
-    labels.forEach((element) {
-      _labels[element] = false;
-    });
-    sliderValue.listen((value) {
-      _value = value.toInt();
-    });
+  SaveSpreadFinalBloc(this.info) {
+    _labelsController.add(emotions);
   }
-  final SavedRepository _savedRepository = GetIt.I.get();
+
+  final _savedRepository = provideSavedRepository();
+  final _journalButtonStream = provideJournalButtonStream();
+
   final SavedSpreadInfo info;
-  StreamController<Map<String, bool>> _labelsController = StreamController();
-  Stream<Map<String, bool>> get labels => _labelsController.stream;
-  Map<String, bool> _labels = {};
 
-  int _value = 1;
-  StreamController<double> _sliderController = StreamController.broadcast();
-  Stream<double> get sliderValue =>
-      _sliderController.stream.shareValueSeeded(1.0);
+  StreamController<List<Label>> _labelsController = StreamController();
+  Stream<List<Label>> get labels => _labelsController.stream;
+  final List<Label> emotions = [
+    'JOY',
+    'CHEERFULNESS',
+    'PLEASURE',
+    'OPTIMISM',
+    'HOPE',
+    'PRIDE',
+    'TRIUMPH',
+    'RELIEF',
+    'ATTRACTION',
+    'LOVE',
+    'SADNESS',
+    'DISAPPOINTMENT',
+    'SHAME',
+    'SUFFERING',
+    'SURPRISE',
+    'FEAR',
+    'ANGER',
+    'IRRITATION',
+  ].map((label) => Label(label, false)).toList()
+    ..shuffle();
 
-  void onTap(String label) {
-    final labelState = _labels[label];
-    if (labelState != null) _labels[label] = !labelState;
-    _labelsController.add(_labels);
+  final _sliderSubject = BehaviorSubject.seeded(1.0);
+  Stream<double> get sliderValue => _sliderSubject.stream;
+
+  void onTap(int index) {
+    emotions[index].switchState();
+    _labelsController.add(emotions);
   }
 
-  Future<bool> saveSpread(BuildContext context) async {
-    bool isCod = info.spread == null;
-    List<String> activeLabels = [];
-    _labels.forEach(
-      (key, value) {
-        if (_labels[key] == true) activeLabels.add(key);
-      },
-    );
+  Future<bool> saveSpread() async {
+    bool isCod = info.spread.isCardOfDay();
+    Iterable<String> activeLabels =
+        emotions.where((element) => element.active).map((e) => e.label);
     String labelResult = activeLabels.join(',');
     try {
       await _savedRepository.insertSpread(
         SavedSpread(
-            isCod ? 4 : info.spread!.spreadCategory,
-            info.spread?.title,
-            _value,
-            DateTime.now().millisecondsSinceEpoch,
-            info.question,
-            info.note,
-            labelResult,
-            jsonEncode(info.savedCards)),
+          info.spread.spreadCategory,
+          info.spread.title,
+          _sliderSubject.value.toInt(),
+          DateTime.now().millisecondsSinceEpoch,
+          info.question,
+          info.note,
+          labelResult,
+          jsonEncode(info.savedCards),
+        ),
       );
-      final provider = Provider.of<DBSaveProvider>(context, listen: false);
-      if (isCod) {
-        provider.codSaved = true;
-        JournalButtonStream.instance.getCardsOfDay();
-      } else {
-        provider.spreadSaved = true;
-        JournalButtonStream.instance.getSpreads();
-      }
-      JournalButtonStream.instance.update();
+      _savedRepository.codSaved.add(isCod);
+      _savedRepository.spreadSaved.add(!isCod);
+      _journalButtonStream.switchButtonMode(isCod);
       return Future.value(true);
     } catch (e, s) {
       //await FirebaseCrashlytics.instance.recordError(e, s);
@@ -76,10 +78,21 @@ class SaveSpreadFinalBloc {
     }
   }
 
-  void changeSliderValue(double value) => _sliderController.add(value);
+  void changeSliderValue(double value) => _sliderSubject.add(value);
 
   void dispose() {
-    _sliderController.close();
     _labelsController.close();
+    _sliderSubject.close();
+  }
+}
+
+class Label {
+  Label(this.label, this.active);
+
+  final String label;
+  bool active;
+
+  void switchState() {
+    active = !active;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/models/saved_spread/saved_spread_info.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
@@ -16,12 +15,12 @@ import 'package:tarot/widgets/grey_italic.dart';
 import 'package:tarot/widgets/tarot_button.dart';
 
 class SaveSpreadScreen extends StatefulWidget with PlanetScreenMixin {
-  final Spread? spread;
+  final Spread spread;
   final List<SavedCard> savedCards;
   final String? question;
 
   const SaveSpreadScreen(
-      {Key? key, this.spread, required this.savedCards, this.question})
+      {Key? key, required this.spread, required this.savedCards, this.question})
       : super(key: key);
 
   @override
@@ -70,9 +69,7 @@ class _SaveSpreadScreenState extends State<SaveSpreadScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                widget.spread != null
-                                    ? widget.spread!.title
-                                    : 'Card of Day',
+                                widget.spread.title,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 24.0,
@@ -81,9 +78,7 @@ class _SaveSpreadScreenState extends State<SaveSpreadScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Image.asset(
-                                  widget.spread != null
-                                      ? widget.spread!.legendAsset
-                                      : 'assets/images/spread_icons/single_card_spread.png',
+                                  widget.spread.legendAsset,
                                   width: 124,
                                 ),
                               ),

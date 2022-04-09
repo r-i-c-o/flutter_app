@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tarot/helpers/ad_manager.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/models/spread/card_of_day_spread.dart';
+import 'package:tarot/repositories/ad_manager.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
@@ -13,7 +12,6 @@ import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/screens/base_ad_screen.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/theme/my_curves.dart';
-import 'package:tarot/widgets/ad_tab_scaffold.dart';
 import 'package:tarot/widgets/animated_tap_icon.dart';
 import 'package:tarot/widgets/appbar.dart';
 import 'package:tarot/widgets/flipable_card.dart';
@@ -55,22 +53,8 @@ class _CardOfDayScreenState extends BaseAdScreenState<CardOfDayScreen> {
 
   @override
   void didChangeDependencies() {
-    Provider.of<AdTabController>(context, listen: false).addListener(_reload);
+    bloc.getCardFromHttp();
     super.didChangeDependencies();
-  }
-
-  @override
-  void deactivate() {
-    Provider.of<AdTabController>(context, listen: false)
-        .removeListener(_reload);
-    flipCardKey = null;
-    super.deactivate();
-  }
-
-  void _reload() {
-    if (Provider.of<AdTabController>(context, listen: false).index == 0) {
-      bloc.getCardFromHttp();
-    }
   }
 
   void _navigateToCardDescription(TarotCard card, int index) {
@@ -78,6 +62,7 @@ class _CardOfDayScreenState extends BaseAdScreenState<CardOfDayScreen> {
       PlanetPageRouteBuilder(
         widget: CardDescriptionScreen(
           card: card,
+          spread: CardOfDaySpread(),
           tag: 1000,
           savedCards: [SavedCard(false, index, 'Card Of Day')],
           question: bloc.question,
@@ -112,7 +97,6 @@ class _CardOfDayScreenState extends BaseAdScreenState<CardOfDayScreen> {
               fontSize: 14.0,
             ),
           ),
-          //Spacer(),
           Expanded(
             child: StreamBuilder<bool>(
                 stream: bloc.questionedStream,
@@ -178,7 +162,6 @@ class _CardOfDayScreenState extends BaseAdScreenState<CardOfDayScreen> {
                   return Container();
                 }),
           ),
-          //Spacer(),
         ],
       ),
     );

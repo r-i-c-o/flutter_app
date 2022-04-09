@@ -1,11 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/ui/tarot_reading/tarot_provider.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/theme/app_colors.dart';

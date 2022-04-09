@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
+import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
@@ -10,16 +10,10 @@ import 'package:tarot/widgets/gradient_border.dart';
 class CardsCategoriesDescription extends StatelessWidget
     with PlanetScreenMixin {
   @override
-  PlanetOffset? get planetOne => PlanetOffset(
-        right: -162.0,
-        bottom: 207.0,
-      );
+  PlanetOffset? get planetOne => handbook_1;
 
   @override
-  PlanetOffset? get planetTwo => PlanetOffset(
-        left: -162.0,
-        top: -100.0,
-      );
+  PlanetOffset? get planetTwo => handbook_2;
 
   @override
   String? get screenRouteName => '/handbook_cards_categories';

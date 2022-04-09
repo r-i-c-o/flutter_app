@@ -2,14 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/models/cards.dart';
-import 'package:tarot/models/cards_reverse.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/tarot_card/cards.dart';
+import 'package:tarot/models/tarot_card/cards_reverse.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/models/spread_card.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
+
+import '../../repositories/firebase_logger.dart';
 
 class TarotProvider with ChangeNotifier {
   int _selectedCard = 0;

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tarot/helpers/ad_manager.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/models/daily_spreads.dart';
-import 'package:tarot/models/spread.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/app_module.dart';
+import 'package:tarot/repositories/ad_manager.dart';
+import 'package:tarot/models/spread/daily_spreads.dart';
+import 'package:tarot/models/spread/spread.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
-import 'package:tarot/providers/db_save_provider.dart';
 import 'package:tarot/ui/tarot_reading/tarot_provider.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/theme/app_colors.dart';
@@ -18,6 +17,7 @@ import 'package:tarot/widgets/scrollable_card_deck.dart';
 import 'package:tarot/widgets/spread_layout.dart';
 import 'package:tarot/widgets/spread_legend.dart';
 
+import '../../repositories/firebase_logger.dart';
 import '../../screens/base_ad_screen.dart';
 import '../../screens/card_description_screen.dart';
 
@@ -44,6 +44,7 @@ class TarotReadingScreen extends StatefulWidget with PlanetScreenMixin {
 }
 
 class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
+  final _savedRepository = provideSavedRepository();
   int _adCounter = 0;
 
   _TarotReadingScreenState(String interstitialAdUnitId)
@@ -53,10 +54,8 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
   void initState() {
     super.initState();
     _adCounter = widget.spread.spreadCards.length >= 5 ? 2 : 1;
-    //FirebaseLogger.logSpreadOpened(widget.spread.title);
-    Future.delayed(Duration.zero).then((value) =>
-        Provider.of<DBSaveProvider>(context, listen: false).spreadSaved =
-            false);
+    //.logSpreadOpened(widget.spread.title);
+    _savedRepository.spreadSaved.add(false);
   }
 
   void _onCardTap(
@@ -82,17 +81,17 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
   @override
   void createOnAdClosed(Function callback) async {
     onAdClosed = callback;
-    //if (interstitialAd == null) {
+    /*if (interstitialAd == null) {
+      onAdClosed!();
+      return;
+    }
+    if (showAd && _adCounter != 0) {
+      interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
+      interstitialAd?.show();
+      interstitialAd = null;
+      _adCounter--;
+    } else*/
     onAdClosed!();
-    //  return;
-    //}
-    //if (!SubscriptionManager.instance.subscribed && _adCounter != 0) {
-    //  //interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
-    //  interstitialAd?.show();
-    //  interstitialAd = null;
-    //  _adCounter--;
-    //} else
-    //  onAdClosed!();
   }
 
   @override
@@ -188,8 +187,10 @@ class LegendPopup extends StatelessWidget {
                 ),
               ),
               Center(
-                  child: SingleChildScrollView(
-                      child: SpreadLegend(spread: spread)))
+                child: SingleChildScrollView(
+                  child: SpreadLegend(spread: spread),
+                ),
+              )
             ],
           ),
         ),

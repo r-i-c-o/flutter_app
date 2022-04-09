@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/remote_config.dart';
+import 'package:tarot/repositories/remote_config.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/gradient_blur.dart';
 import 'package:tarot/widgets/tarot_button.dart';

@@ -5,16 +5,16 @@ import 'dart:io';
 import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
-import 'package:tarot/models/cards.dart' as cards;
-import 'package:tarot/models/tarot_card.dart';
-import 'package:rxdart/streams.dart';
-
-import 'card_of_day_questioned_state.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:tarot/models/tarot_card/cards.dart' as cards;
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 
 class CardOfDayBloc {
   CardOfDayBloc() {
     getCardFromHttp();
   }
+
+  static bool wasQuestioned = false;
 
   StateWithCard _previousState = StateWithCard(cards.cards[0], false, 0);
 
@@ -22,9 +22,9 @@ class CardOfDayBloc {
   Stream<CardOfDayState> get cardStream => _cardStreamController.stream;
 
   String question = '';
-  StreamController<bool> _questionedController = StreamController.broadcast();
-  Stream<bool> get questionedStream => _questionedController.stream
-      .shareValueSeeded(CardOfDayQuestionedState.wasQuestioned);
+  BehaviorSubject<bool> _questionedController =
+      BehaviorSubject.seeded(wasQuestioned);
+  Stream<bool> get questionedStream => _questionedController.stream;
 
   void getCardFromHttp() async {
     _cardStreamController.add(LoadingState());
@@ -43,7 +43,7 @@ class CardOfDayBloc {
   }
 
   void setQuestioned() {
-    CardOfDayQuestionedState.wasQuestioned = true;
+    wasQuestioned = true;
     _questionedController.add(true);
   }
 

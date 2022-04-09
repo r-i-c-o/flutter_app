@@ -1,33 +1,10 @@
 import 'dart:async';
-import 'package:rxdart/streams.dart';
+import 'package:rxdart/rxdart.dart';
 
 class JournalButtonStream {
-  static JournalButtonStream? _instance;
-  static JournalButtonStream get instance {
-    _instance ??= JournalButtonStream._();
-    return _instance!;
-  }
+  final _buttonModeController = BehaviorSubject.seeded(true);
 
-  JournalButtonStream._() {
-    _buttonMode = _buttonModeController.stream.shareValueSeeded(true);
-    _update = _updateController.stream.shareValueSeeded(true);
-  }
+  Stream<bool> get buttonMode => _buttonModeController.stream;
 
-  final StreamController<bool> _buttonModeController =
-      StreamController<bool>.broadcast();
-
-  final StreamController<bool> _updateController =
-      StreamController<bool>.broadcast();
-
-  late final Stream<bool> _buttonMode;
-  Stream<bool> get buttonMode => _buttonMode;
-
-  late final Stream<bool> _update;
-  Stream<bool> get updateStream => _update;
-
-  void update() => _updateController.add(true);
-
-  void getCardsOfDay() => _buttonModeController.add(true);
-
-  void getSpreads() => _buttonModeController.add(false);
+  void switchButtonMode(bool isCod) => _buttonModeController.add(isCod);
 }

@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:tarot/ui/tarot_reading/tarot_provider.dart';
-//import 'package:just_audio/just_audio.dart';
 
 class ScrollableDeckController extends ChangeNotifier {
   //todo: try to use only [_x] array, or maybe use smth else
@@ -35,8 +34,6 @@ class ScrollableDeckController extends ChangeNotifier {
   late AnimationController moveCardController;
   late VoidCallback moveCallback;
 
-  //late AudioPlayer _player;
-
   double cardWidth = 0.0;
   double cardHeight = 0.0;
   double referencePosition = 0.0;
@@ -62,8 +59,6 @@ class ScrollableDeckController extends ChangeNotifier {
     moveCardController = AnimationController(
       vsync: vsync,
     );
-
-    //_loadPlayer();
 
     _initialize();
 
@@ -147,7 +142,6 @@ class ScrollableDeckController extends ChangeNotifier {
       scale: cardDestination.width / cardWidth,
     );
     moveCardController.reset();
-    //_player.play();
     return moveCardController.animateTo(
       1.0,
       duration: Duration(milliseconds: 600),
@@ -243,7 +237,7 @@ class ScrollableDeckController extends ChangeNotifier {
     }
   }
 
-  double _calculateSingleRotation(num relativePosition) {
+  double _calculateSingleRotation(double relativePosition) {
     return 0.0005 * relativePosition; //just fine value
   }
 

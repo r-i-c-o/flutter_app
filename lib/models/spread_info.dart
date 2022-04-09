@@ -1,4 +1,4 @@
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 
 class SpreadInfo {
   final Spread spread;

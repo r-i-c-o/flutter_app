@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:tarot/app_module.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:tarot/helpers/ad_manager.dart';
-import 'package:tarot/helpers/subscription_manager.dart';
 //import 'package:kado_analytics_module/ad_listeners.dart';
+
+import '../repositories/ad_manager.dart';
 
 class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
   static const int _maxFailedLoadAttempts = 10;
   int _numInterstitialLoadAttempts = 0;
-  final String _interstitialAdUnitId;
+  final String? _interstitialAdUnitId;
   //InterstitialAd? interstitialAd;
   Function? onAdClosed;
   bool _showAd = true;
-  SubscriptionRepository _subscriptionManager =
-      GetIt.I.get<SubscriptionRepository>();
+  bool get showAd => _showAd;
+  final subscriptionRepository = provideSubscriptionRepository();
 
   //late KadoInterstitialListener listener;
   BaseAdScreenState(this._interstitialAdUnitId) : super();
@@ -21,8 +21,8 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
   @override
   void initState() {
     super.initState();
-    _showAd = !_subscriptionManager.subscribed;
-    _subscriptionManager.subscriptionStream.listen((subscribed) {
+    _showAd = !subscriptionRepository.subscribed;
+    subscriptionRepository.subscriptionStream.listen((subscribed) {
       _showAd = !subscribed;
     });
     /*listener = KadoInterstitialListener(
@@ -68,9 +68,9 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
   }
 
   void _createInterstitial() {
-    if (!_showAd) return;
+    if (!_showAd || _interstitialAdUnitId == null) return;
     /*InterstitialAd.load(
-      adUnitId: _interstitialAdUnitId,
+      adUnitId: _interstitialAdUnitId!,
       request: AdRequest(),
       adLoadCallback: listener.interstitialListener,
     );*/
@@ -80,14 +80,14 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
     onAdClosed = callback;
     //if (interstitialAd == null) {
     onAdClosed!();
-    //  return;
-    //}
-    //if (_showAd) {
-    //  //interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
-    //  interstitialAd?.show();
-    //  interstitialAd = null;
-    //} else
-    //  onAdClosed!();
+    /*  return;
+    }
+    if (_showAd) {
+      interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
+      interstitialAd?.show();
+      interstitialAd = null;
+    } else
+      onAdClosed!();*/
   }
 
   @override

@@ -1,21 +1,15 @@
 //import 'package:firebase_analytics/firebase_analytics.dart';
 //import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 //import 'package:kado_analytics_module/observer.dart';
-import 'package:provider/provider.dart';
 import 'package:tarot/app_module.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
 import 'package:tarot/planets/planet_observer.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_screen.dart';
-import 'package:tarot/providers/db_save_provider.dart';
-import 'package:tarot/providers/planets_provider.dart';
-import 'package:tarot/providers/shared_preferences_provider.dart';
-import 'package:tarot/screens/main_screen.dart';
-import 'package:tarot/screens/onboarding.dart';
-import 'package:tarot/screens/splash.dart';
-import 'package:tarot/screens/username_screen.dart';
+import 'package:tarot/ui/main/main_screen.dart';
+import 'package:tarot/ui/login/onboarding.dart';
+import 'package:tarot/ui/login/splash.dart';
+import 'package:tarot/ui/login/username_screen.dart';
 import 'package:tarot/widgets/background.dart';
 
 class AppContainer extends StatelessWidget {
@@ -23,25 +17,12 @@ class AppContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => SharedPreferencesProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => PlanetsProvider(size),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => DBSaveProvider(),
-        ),
+    providePlanets().setSize(size);
+    return Stack(
+      children: [
+        Background(),
+        MainPopScope(),
       ],
-      child: Stack(
-        children: [
-          Background(),
-          MainPopScope(),
-        ],
-      ),
     );
   }
 }
@@ -66,7 +47,7 @@ class MainNavigator extends StatelessWidget {
     return Navigator(
       key: provideNavHelper().mainNavigatorKey,
       observers: [
-        PlanetObserver(Provider.of<PlanetsProvider>(context, listen: false)),
+        PlanetObserver(),
         //FirebaseAnalyticsObserver(analytics: FirebaseAnalytics()),
         //KadoAnalyticsNavigationObserver(),
       ],

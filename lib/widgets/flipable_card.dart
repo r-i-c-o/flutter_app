@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tarot/helpers/card_faces_directory.dart';
-import 'package:tarot/models/tarot_card.dart';
+import 'package:tarot/repositories/card_faces_directory.dart';
+import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/theme/app_colors.dart';
 
 class FlipableLayoutCard extends StatefulWidget {

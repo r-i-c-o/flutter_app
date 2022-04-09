@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 //import 'package:google_mobile_ads/google_mobile_ads.dart';
 //import 'package:kado_analytics_module/ad_listeners.dart';
-import 'package:tarot/helpers/ad_manager.dart';
-//import 'package:tarot/helpers/firebase_logger.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/helpers/subscription_manager.dart';
-import 'package:tarot/models/career_spreads.dart';
-import 'package:tarot/models/daily_spreads.dart';
-import 'package:tarot/models/love_spreads.dart';
-import 'package:tarot/models/spiritual_spreads.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/repositories/ad_manager.dart';
+import 'package:tarot/repositories/firebase_logger.dart';
+import 'package:tarot/repositories/subscription_manager.dart';
+import 'package:tarot/models/spread/career_spreads.dart';
+import 'package:tarot/models/spread/daily_spreads.dart';
+import 'package:tarot/models/spread/love_spreads.dart';
+import 'package:tarot/models/spread/spiritual_spreads.dart';
+import 'package:tarot/models/spread/spread.dart';
 import 'package:tarot/models/spread_info.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
-import 'package:tarot/screens/pay_wall.dart';
+import 'package:tarot/ui/paywall/pay_wall.dart';
 import 'package:tarot/screens/spread_info.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/appbar.dart';
@@ -112,15 +111,15 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
   }
 
   void _showRewarded() {
-    //if (_rewardedAd == null) return;
-    /*_rewardedAd?.fullScreenContentCallback = listener.fullScreenCallback;
+    /*if (_rewardedAd == null) return;
+    _rewardedAd?.fullScreenContentCallback = listener.fullScreenCallback;
     _rewardedAd?.show(
       onUserEarnedReward: (ad, reward) {
         FirebaseLogger.logRewardedWatched(_spreadToNavigate?.title ?? "error");
         _navigateToSpread();
       },
-    );*/
-    //_rewardedAd = null;
+    );
+    _rewardedAd = null;*/
   }
 
   void _showSubscribePopoutOrNavigateToSpread() async {

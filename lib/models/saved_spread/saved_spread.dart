@@ -15,6 +15,8 @@ class SavedSpread {
 
   SavedSpread(this.spreadType, this.spreadName, this.emotion, this.date,
       this.question, this.note, this.labels, this.cardsJson);
+
+  bool isCardOfDay() => spreadType == 4;
 }
 
 class SavedCard {

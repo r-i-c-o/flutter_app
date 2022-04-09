@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tarot/models/spread.dart';
+import 'package:tarot/models/spread/spread.dart';
 
 import 'grey_italic.dart';
 

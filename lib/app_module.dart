@@ -1,19 +1,30 @@
 import 'package:get_it/get_it.dart';
-import 'package:tarot/helpers/navigation_helper.dart';
-import 'package:tarot/helpers/shared_preferences_manager.dart';
-import 'package:tarot/saved_db/saved_repository.dart';
+import 'package:tarot/repositories/navigation_helper.dart';
+import 'package:tarot/repositories/settings_repository.dart';
+import 'package:tarot/repositories/planets_provider.dart';
+import 'package:tarot/repositories/saved_repository.dart';
+import 'package:tarot/ui/journal/journal_button_stream.dart';
 
-import 'helpers/notifications_manager.dart';
-import 'helpers/subscription_manager.dart';
+import 'repositories/notifications_manager.dart';
+import 'repositories/subscription_manager.dart';
 
 GetIt getIt = GetIt.instance;
 
 NavigationHelper provideNavHelper() => getIt.get();
 
-SharedPreferencesManager providePrefs() => getIt.get();
+SettingsRepository provideSettings() => getIt.get();
 
 NotificationManager provideNotificationManager() => getIt.get();
 
 SavedRepository provideSavedRepository() => getIt.get();
 
 SubscriptionRepository provideSubscriptionRepository() => getIt.get();
+
+PlanetsProvider providePlanets() => getIt.get();
+
+JournalButtonStream provideJournalButtonStream() => getIt.get();
+
+Future<T> provideAsync<T extends Object>() async {
+  await getIt.isReady<T>();
+  return getIt.get<T>();
+}

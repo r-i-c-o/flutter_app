@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:tarot/app_module.dart';
-import 'package:tarot/models/pair.dart';
 import 'package:tarot/repositories/subscription_manager.dart';
 import 'package:tarot/saved_db/saved_dao.dart';
 import 'package:tarot/saved_db/saved_database.dart';

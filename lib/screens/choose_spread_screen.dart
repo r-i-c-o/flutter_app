@@ -1,8 +1,8 @@
-//import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
-//import 'package:kado_analytics_module/ad_listeners.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kado_analytics_module/ad_listeners.dart';
 import 'package:tarot/repositories/ad_manager.dart';
 import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/repositories/subscription_manager.dart';
@@ -50,8 +50,8 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
     careerSpreads,
     spiritSpreads,
   ];
-  //RewardedAd? _rewardedAd;
-  //late KadoRewardedListener listener;
+  RewardedAd? _rewardedAd;
+  late KadoRewardedListener listener;
   int _numRewardedLoadAttempts = 0;
 
   Spread? _spreadToNavigate;
@@ -68,7 +68,7 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
   @override
   void initState() {
     super.initState();
-    /*listener = KadoRewardedListener(
+    listener = KadoRewardedListener(
       name: 'choose_spread_rewarded',
       adLoaded: (ad) {
         _rewardedAd = ad;
@@ -90,7 +90,7 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
         ad.dispose();
         _loadRewarded();
       },
-    );*/
+    );
     if (!_subscriptionManager.subscribed) {
       _loadRewarded();
     }
@@ -98,20 +98,20 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
 
   @override
   void dispose() {
-    //_rewardedAd?.dispose();
+    _rewardedAd?.dispose();
     super.dispose();
   }
 
   void _loadRewarded() {
-    /*RewardedAd.load(
+    RewardedAd.load(
       adUnitId: AdManager.rewardedAdUnitId,
       request: AdRequest(),
       rewardedAdLoadCallback: listener.rewardedListener,
-    );*/
+    );
   }
 
   void _showRewarded() {
-    /*if (_rewardedAd == null) return;
+    if (_rewardedAd == null) return;
     _rewardedAd?.fullScreenContentCallback = listener.fullScreenCallback;
     _rewardedAd?.show(
       onUserEarnedReward: (ad, reward) {
@@ -119,13 +119,13 @@ class _ChooseSpreadScreenState extends State<ChooseSpreadScreen> {
         _navigateToSpread();
       },
     );
-    _rewardedAd = null;*/
+    _rewardedAd = null;
   }
 
   void _showSubscribePopoutOrNavigateToSpread() async {
     final topPadding = MediaQuery.of(context).padding.top;
     if (!_subscriptionManager.subscribed && _spreadToNavigate!.premium) {
-      //FirebaseLogger.logPremiumPopupOpened();
+      FirebaseLogger.logPremiumPopupOpened();
       showModalBottomSheet(
         backgroundColor: Colors.black.withOpacity(0.75),
         context: context,

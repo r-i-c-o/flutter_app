@@ -230,10 +230,10 @@ class TarotPageView extends StatelessWidget {
           controller: controller,
           onPageChanged: (value) {
             pageNotifier.value = value;
-            /*FirebaseLogger.logScreenView(
+            FirebaseLogger.logScreenView(
               'onboarding${controller == null ? 1 : 2}_$value',
               null,
-            );*/
+            );
           },
           physics: BouncingScrollPhysics(),
           children: [

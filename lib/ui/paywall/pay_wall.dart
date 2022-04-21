@@ -47,7 +47,7 @@ class _PayWallState extends BaseSubscribeState<PayWall> {
 
   @override
   void initState() {
-    //FirebaseLogger.logScreenView("paywall", widget.fromScreen);
+    FirebaseLogger.logScreenView("paywall", widget.fromScreen);
     super.initState();
   }
 
@@ -68,7 +68,7 @@ class _PayWallState extends BaseSubscribeState<PayWall> {
   }
 
   void _navigateToSpread(SpreadInfo info) {
-    //FirebaseLogger.logSubscribed(info.category, info.spread.title);
+    FirebaseLogger.logSubscribed(info.category, info.spread.title);
     Navigator.of(context).pushAndRemoveUntil(
       PlanetMaterialPageRoute(
         widget: SpreadInfoScreen(

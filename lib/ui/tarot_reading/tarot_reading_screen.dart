@@ -13,8 +13,8 @@ import 'package:tarot/ui/tarot_reading/tarot_provider.dart';
 import 'package:tarot/models/saved_spread/saved_spread.dart';
 import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/appbar.dart';
-import 'package:tarot/widgets/scrollable_card_deck.dart';
-import 'package:tarot/widgets/spread_layout.dart';
+import 'package:tarot/ui/tarot_reading/scrollable_card_deck.dart';
+import 'package:tarot/ui/tarot_reading/spread_layout.dart';
 import 'package:tarot/widgets/spread_legend.dart';
 
 import '../../repositories/firebase_logger.dart';
@@ -54,7 +54,7 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
   void initState() {
     super.initState();
     _adCounter = widget.spread.spreadCards.length >= 5 ? 2 : 1;
-    //.logSpreadOpened(widget.spread.title);
+    FirebaseLogger.logSpreadOpened(widget.spread.title);
     _savedRepository.spreadSaved.add(false);
   }
 
@@ -81,7 +81,7 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
   @override
   void createOnAdClosed(Function callback) async {
     onAdClosed = callback;
-    /*if (interstitialAd == null) {
+    if (interstitialAd == null) {
       onAdClosed!();
       return;
     }
@@ -90,8 +90,8 @@ class _TarotReadingScreenState extends BaseAdScreenState<TarotReadingScreen> {
       interstitialAd?.show();
       interstitialAd = null;
       _adCounter--;
-    } else*/
-    onAdClosed!();
+    } else
+      onAdClosed!();
   }
 
   @override

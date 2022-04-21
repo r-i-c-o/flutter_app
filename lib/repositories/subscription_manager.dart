@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-//import 'package:apphud/apphud.dart';
-//import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-//import 'package:in_app_purchase/in_app_purchase.dart';
-//import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:apphud/apphud.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tarot/repositories/remote_config.dart';
 
@@ -12,7 +12,7 @@ class SubscriptionRepository {
   static const String _revenuecatApiKey = "fhbnZanRslQQfdPlXHElULRSRRqpfOnY";
   static const String _apphudApiKey = 'app_tbvBXRQzMRaPnH3oXriDQbwhxaHcCx';
 
-  //List<ProductWrapper> currentProducts = [];
+  List<ProductWrapper> currentProducts = [];
 
   BehaviorSubject<bool> _subscriptionController = BehaviorSubject.seeded(false);
   bool get subscribed => _subscriptionController.value;
@@ -23,7 +23,7 @@ class SubscriptionRepository {
   }
 
   Future<SubscriptionRepository> init() async {
-    /*InAppPurchaseConnection.enablePendingPurchases();
+    InAppPurchaseConnection.enablePendingPurchases();
     try {
       await Purchases.setDebugLogsEnabled(false);
       await Purchases.setup(_revenuecatApiKey, observerMode: true);
@@ -83,14 +83,13 @@ class SubscriptionRepository {
     } catch (e, s) {
       changeSubscriptionStatus(false);
       await FirebaseCrashlytics.instance.recordError(e, s);
-    }*/
+    }
     return this;
   }
 }
 
 class ProductWrapper {
-  //final ProductDetails productDetails;
-  final dynamic productDetails;
+  final ProductDetails productDetails;
   final SubscriptInfo info;
 
   ProductWrapper(this.productDetails, this.info);

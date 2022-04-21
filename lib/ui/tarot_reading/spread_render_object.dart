@@ -9,6 +9,7 @@ import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
 import 'package:tarot/planets/planet_screen.dart';
 import 'package:tarot/theme/app_colors.dart';
+import 'package:tarot/ui/tarot_reading/scrollable_cards.dart';
 import 'package:tarot/ui/tarot_reading/tarot_reading_screen.dart';
 import 'package:tarot/widgets/appbar.dart';
 
@@ -31,11 +32,20 @@ class TarotScreen extends StatefulWidget with PlanetScreenMixin {
   String? get screenRouteName => 'routeName';
 }
 
-class _TarotScreenState extends State<TarotScreen> {
+class _TarotScreenState extends State<TarotScreen>
+    with SingleTickerProviderStateMixin {
   Future<ui.Image> getImage(String img) async {
     final data = await rootBundle.load(img);
     final bytes = data.buffer.asUint8List();
     return decodeImageFromList(bytes);
+  }
+
+  late ScrollableCardsState state;
+
+  @override
+  void initState() {
+    super.initState();
+    state = ScrollableCardsState(this);
   }
 
   @override
@@ -50,7 +60,18 @@ class _TarotScreenState extends State<TarotScreen> {
                     getImage('assets/images/cards/scrollable_card_shirt.png'),
                 builder: (context, snapshot) {
                   if (snapshot.hasData)
-                    return TarotWidget(snapshot.data!);
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onHorizontalDragUpdate: (details) {
+                        //if (controller.canScroll) {
+                        state.scrollValue -= details.primaryDelta ?? 0.0;
+                        //}
+                      },
+                      onHorizontalDragEnd: (details) {
+                        state.onScrollEnd(-details.velocity.pixelsPerSecond.dx);
+                      },
+                      child: TarotWidget(snapshot.data!, state),
+                    );
                   else
                     return Container();
                 }),
@@ -96,24 +117,34 @@ class _TarotScreenState extends State<TarotScreen> {
 
 class TarotWidget extends LeafRenderObjectWidget {
   final ui.Image deckCardImage;
+  final ScrollableCardsState state;
 
-  const TarotWidget(this.deckCardImage);
+  TarotWidget(this.deckCardImage, this.state);
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _TarotRenderObject(deckCardImage);
+    return _TarotRenderObject(deckCardImage, state);
   }
 }
 
 class _TarotRenderObject extends RenderBox {
-  final ui.Image deckCardImage;
+  _TarotRenderObject(this._deckCardImage, ScrollableCardsState state) {
+    this.state = state;
+  }
+
+  ScrollableCardsState get state => _state;
+  late ScrollableCardsState _state;
+  set state(ScrollableCardsState newState) {
+    _state = newState;
+    _state.needPaint = markNeedsPaint;
+  }
+
+  final ui.Image _deckCardImage;
 
   double wDeckCard = 0.0;
   double hDeckCard = 0.0;
   double minY = 0.0;
   double referencePosition = 0.0;
-
-  _TarotRenderObject(this.deckCardImage);
 
   @override
   void performLayout() {
@@ -122,25 +153,30 @@ class _TarotRenderObject extends RenderBox {
     wDeckCard = hDeckCard / 1.4;
     minY = size.height * 0.6;
     referencePosition = (size.width - wDeckCard) * 0.5;
+    _state.setSize(size, wDeckCard);
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
-
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < state.numberOfCards; i++) {
       canvas.save();
       canvas.translate(wDeckCard * 0.5, hDeckCard * 0.5);
-      canvas.rotate(0.0005 * (wDeckCard * 0.5 * i - referencePosition));
+      canvas.rotate(0.0005 *
+          ((wDeckCard * 0.5 * i - state.scrollValue) - referencePosition));
       canvas.translate(-wDeckCard * 0.5, -hDeckCard * 0.5);
       paintImage(
         canvas: canvas,
-        rect: Rect.fromLTWH(offset.dx + wDeckCard * 0.5 * i, offset.dy + minY,
-            wDeckCard, hDeckCard),
-        image: deckCardImage,
+        rect: Rect.fromLTWH(offset.dx + wDeckCard * 0.5 * i - state.scrollValue,
+            offset.dy + minY, wDeckCard, hDeckCard),
+        image: _deckCardImage,
         isAntiAlias: true,
       );
       canvas.restore();
     }
   }
+
+  /*bool _isVisible(int i, Offset offset) {
+    return offset.dx + wDeckCard * 0.5 * i;
+  }*/
 }

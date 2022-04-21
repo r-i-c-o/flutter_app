@@ -105,7 +105,7 @@ class TarotProvider with ChangeNotifier {
   void onCardSelected() {
     cardStates[_selectedCard] = SelectCardState.Flip;
     _selectedCard++;
-    //if (allCardsSelected) FirebaseLogger.logSpreadDrawn(spread.title);
+    if (allCardsSelected) FirebaseLogger.logSpreadDrawn(spread.title);
     notifyListeners();
   }
 

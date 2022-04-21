@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tarot/providers/scrollable_deck_controller.dart';
+import 'package:tarot/ui/tarot_reading/scrollable_deck_controller.dart';
 import 'package:tarot/ui/tarot_reading/tarot_provider.dart';
 
 class ScrollableCardDeck extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:kado_analytics_module/buttons.dart';
-//import 'package:tarot/repositories/firebase_logger.dart';
+import 'package:kado_analytics_module/buttons.dart';
+import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/planets/planet_page_route.dart';
 import 'package:tarot/ui/paywall/pay_wall.dart';
 import 'package:tarot/widgets/gradient_blur.dart';
@@ -37,7 +37,7 @@ class FreePremiumPopup extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context, rootNavigator: true).pop();
-                            //FirebaseLogger.logClick('free_popup_exit');
+                            FirebaseLogger.logClick('free_popup_exit');
                           },
                           child: const Icon(
                             Icons.close,

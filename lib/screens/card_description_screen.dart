@@ -21,6 +21,8 @@ import 'package:tarot/widgets/save_limit_popup.dart';
 import 'package:tarot/widgets/text_splitted.dart';
 import 'package:vibration/vibration.dart';
 
+import '../repositories/firebase_logger.dart';
+
 class CardDescriptionScreen extends StatefulWidget with PlanetScreenMixin {
   static const String routeName = '/card_description';
   final int tag;
@@ -63,7 +65,7 @@ class _CardDescriptionScreenState extends State<CardDescriptionScreen> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    //FirebaseLogger.logViewTarotCard();
+    FirebaseLogger.logViewTarotCard();
     _vibrate();
   }
 

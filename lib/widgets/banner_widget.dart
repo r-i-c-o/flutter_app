@@ -1,4 +1,3 @@
-/*
 import 'package:flutter/material.dart';
 import 'package:kado_analytics_module/ad_listeners.dart';
 import 'package:native_admob_flutter/native_admob_flutter.dart';
@@ -77,4 +76,3 @@ class _BannerWidgetState extends State<BannerWidget>
     );
   }
 }
-*/

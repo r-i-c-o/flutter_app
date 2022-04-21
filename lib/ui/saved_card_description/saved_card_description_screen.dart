@@ -3,8 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:tarot/repositories/card_faces_directory.dart';
-//import 'package:tarot/repositories/firebase_logger.dart';
-import 'package:tarot/repositories/navigation_helper.dart';
+import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/models/tarot_card/tarot_card.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
@@ -49,7 +48,7 @@ class _SavedCardDescriptionScreenState
   void initState() {
     super.initState();
     _controller = ScrollController();
-    //FirebaseLogger.logViewTarotCard();
+    FirebaseLogger.logViewTarotCard();
     _vibrate();
   }
 

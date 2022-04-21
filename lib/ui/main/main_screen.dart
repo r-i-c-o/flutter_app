@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tarot/app_module.dart';
-//import 'package:tarot/repositories/firebase_logger.dart';
+import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/repositories/navigation_helper.dart';
 import 'package:tarot/planets/default_positions.dart';
 import 'package:tarot/planets/planet_position.dart';
@@ -25,7 +25,7 @@ class MainScreen extends StatelessWidget with PlanetScreenMixin {
   final _settingsRepository = provideSettings();
 
   void _navigateTo(int page, BuildContext context) async {
-    //FirebaseLogger.logScreenView("main $page", null);
+    FirebaseLogger.logScreenView("main $page", null);
     GetIt.I.get<NavigationHelper>().currentIndex = page;
     Navigator.of(context).push(
       MaterialPageRoute(

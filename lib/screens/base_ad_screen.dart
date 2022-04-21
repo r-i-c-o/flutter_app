@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tarot/app_module.dart';
-//import 'package:google_mobile_ads/google_mobile_ads.dart';
-//import 'package:kado_analytics_module/ad_listeners.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kado_analytics_module/ad_listeners.dart';
 
 import '../repositories/ad_manager.dart';
 
@@ -9,13 +9,13 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
   static const int _maxFailedLoadAttempts = 10;
   int _numInterstitialLoadAttempts = 0;
   final String? _interstitialAdUnitId;
-  //InterstitialAd? interstitialAd;
+  InterstitialAd? interstitialAd;
   Function? onAdClosed;
   bool _showAd = true;
   bool get showAd => _showAd;
   final subscriptionRepository = provideSubscriptionRepository();
 
-  //late KadoInterstitialListener listener;
+  late KadoInterstitialListener listener;
   BaseAdScreenState(this._interstitialAdUnitId) : super();
 
   @override
@@ -25,7 +25,7 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
     subscriptionRepository.subscriptionStream.listen((subscribed) {
       _showAd = !subscribed;
     });
-    /*listener = KadoInterstitialListener(
+    listener = KadoInterstitialListener(
       name: AdManager.adIds.keys.firstWhere(
         (key) => AdManager.adIds[key] == _interstitialAdUnitId,
         orElse: () => 'error',
@@ -50,13 +50,13 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
         _adClosedCallback();
         _createInterstitial();
       },
-    );*/
+    );
     _createInterstitial();
   }
 
   @override
   void dispose() {
-    //interstitialAd?.dispose();
+    interstitialAd?.dispose();
     super.dispose();
   }
 
@@ -69,25 +69,25 @@ class BaseAdScreenState<T extends StatefulWidget> extends State<T> {
 
   void _createInterstitial() {
     if (!_showAd || _interstitialAdUnitId == null) return;
-    /*InterstitialAd.load(
+    InterstitialAd.load(
       adUnitId: _interstitialAdUnitId!,
       request: AdRequest(),
       adLoadCallback: listener.interstitialListener,
-    );*/
+    );
   }
 
   void createOnAdClosed(Function callback) {
     onAdClosed = callback;
-    //if (interstitialAd == null) {
-    onAdClosed!();
-    /*  return;
+    if (interstitialAd == null) {
+      onAdClosed!();
+      return;
     }
     if (_showAd) {
       interstitialAd?.fullScreenContentCallback = listener.fullScreenCallback;
       interstitialAd?.show();
       interstitialAd = null;
     } else
-      onAdClosed!();*/
+      onAdClosed!();
   }
 
   @override

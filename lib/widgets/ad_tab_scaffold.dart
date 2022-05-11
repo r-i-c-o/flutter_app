@@ -52,7 +52,7 @@ class _AdTabScaffoldState extends State<AdTabScaffold> {
               ),
             ),
           ),
-          //BannerWidget(),
+          BannerWidget(),
           ValueListenableBuilder<int>(
             valueListenable: _controller,
             builder: (_, value, __) => widget.tabBar.copyWith(

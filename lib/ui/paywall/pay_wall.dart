@@ -111,6 +111,16 @@ class _PayWallState extends BaseSubscribeState<PayWall> {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              "Let's try",
+              style: const TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Container(
             color: Colors.orange,
             child: Padding(
@@ -144,8 +154,7 @@ class _PayWallState extends BaseSubscribeState<PayWall> {
           ),
           SubscriptionRadios(
             onBuy: buy,
-            //products: productsList,
-            products: [],
+            products: productsList,
             onChanged: setSubscription,
             subscriptionIndex: subscriptionIndex,
           ),

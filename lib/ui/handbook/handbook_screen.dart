@@ -52,6 +52,7 @@ class HandBookScreen extends StatelessWidget with PlanetScreenMixin {
             SliverAppBar(
               expandedHeight: 250.0,
               backgroundColor: Color(0xFF142431),
+              foregroundColor: AppColors.textColor,
               title: Text(
                 'Tarot Handbook',
                 maxLines: 1,

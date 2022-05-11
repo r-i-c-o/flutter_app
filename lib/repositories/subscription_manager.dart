@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:apphud/apphud.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tarot/repositories/remote_config.dart';
@@ -12,7 +12,8 @@ class SubscriptionRepository {
   static const String _revenuecatApiKey = "fhbnZanRslQQfdPlXHElULRSRRqpfOnY";
   static const String _apphudApiKey = 'app_tbvBXRQzMRaPnH3oXriDQbwhxaHcCx';
 
-  List<ProductWrapper> currentProducts = [];
+  //List<ProductWrapper> currentProducts = [];
+  List<SubscriptInfo> currentSubscriptInfo = [];
 
   BehaviorSubject<bool> _subscriptionController = BehaviorSubject.seeded(false);
   bool get subscribed => _subscriptionController.value;
@@ -23,6 +24,55 @@ class SubscriptionRepository {
   }
 
   Future<SubscriptionRepository> init() async {
+    //final available = await InAppPurchase.instance.isAvailable();
+    //if (!available) return this;
+    try {
+      await Purchases.setDebugLogsEnabled(false);
+      await Purchases.setup(_revenuecatApiKey, observerMode: true);
+      //await Apphud.start(apiKey: _apphudApiKey, observerMode: true);
+      await Apphud.start(apiKey: _apphudApiKey);
+      await Apphud.syncPurchases();
+      // get products
+      List<SubscriptInfo> offeringList;
+      switch (RemoteConfigManager.offering) {
+        case '1':
+          offeringList = [
+            SubscriptInfo.weekly5(),
+            SubscriptInfo.monthly5(),
+            SubscriptInfo.annual5(),
+          ];
+          break;
+        case '2':
+          offeringList = [SubscriptInfo.monthlySpecial()];
+          break;
+        default:
+          offeringList = [
+            SubscriptInfo.weekly5(),
+            SubscriptInfo.monthly5(),
+            SubscriptInfo.annual5(),
+          ];
+      }
+      currentSubscriptInfo = offeringList;
+      /*await Future.forEach(offeringList, (SubscriptInfo info) async {
+        Set<String> singleElementSet = {info.productId};
+        final pdr =
+            await InAppPurchase.instance.queryProductDetails(singleElementSet);
+        final pdList = pdr.productDetails;
+        currentProducts.add(
+          ProductWrapper(pdList.first, info),
+        );
+      });*/
+
+      //check purchases
+      final sub = await Apphud.hasActiveSubscription();
+      changeSubscriptionStatus(sub);
+    } catch (e, s) {
+      changeSubscriptionStatus(false);
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
+    return this;
+  }
+  /*Future<SubscriptionRepository> init() async {
     InAppPurchaseConnection.enablePendingPurchases();
     try {
       await Purchases.setDebugLogsEnabled(false);
@@ -85,15 +135,15 @@ class SubscriptionRepository {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
     return this;
-  }
+  }*/
 }
 
-class ProductWrapper {
+/*class ProductWrapper {
   final ProductDetails productDetails;
   final SubscriptInfo info;
 
   ProductWrapper(this.productDetails, this.info);
-}
+}*/
 
 class SubscriptInfo {
   final String productId;

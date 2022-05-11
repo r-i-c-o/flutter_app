@@ -27,7 +27,7 @@ void main() async {
 
   //AdManager.setTestMode();
   await gms.MobileAds.instance.initialize();
-  nativeads.MobileAds.initialize();
+  await nativeads.MobileAds.initialize();
 
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;

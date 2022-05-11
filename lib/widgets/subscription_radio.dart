@@ -4,7 +4,7 @@ class SubscriptionRadio extends StatelessWidget {
   final String label;
   final int groupValue;
   final int value;
-  final Function onChanged;
+  final Function(int) onChanged;
   final String? save;
 
   const SubscriptionRadio(
@@ -26,7 +26,7 @@ class SubscriptionRadio extends StatelessWidget {
           Radio<int>(
             value: value,
             groupValue: groupValue,
-            onChanged: (value) => onChanged(value),
+            onChanged: (value) => onChanged(value!),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             activeColor: Colors.orange,
           ),

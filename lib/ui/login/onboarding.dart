@@ -103,8 +103,7 @@ class _OnBoarding1State extends BaseSubscribeState<OnBoarding1> {
         ),
         SubscriptionRadios(
           onBuy: buy,
-          //products: productsList,
-          products: [],
+          products: productsList,
           onChanged: setSubscription,
           subscriptionIndex: subscriptionIndex,
         ),

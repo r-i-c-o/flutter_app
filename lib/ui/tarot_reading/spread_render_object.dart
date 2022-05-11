@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -159,6 +160,9 @@ class _TarotRenderObject extends RenderBox {
   @override
   void paint(PaintingContext context, Offset offset) {
     final Canvas canvas = context.canvas;
+    //STATES
+    //scroll state - draw deck and spread
+    //drawn state - draw spread
     for (int i = 0; i < state.numberOfCards; i++) {
       canvas.save();
       canvas.translate(wDeckCard * 0.5, hDeckCard * 0.5);

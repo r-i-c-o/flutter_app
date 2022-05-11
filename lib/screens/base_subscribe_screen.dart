@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:apphud/apphud.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+//import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../repositories/subscription_manager.dart';
@@ -11,14 +11,16 @@ import 'base_ad_screen.dart';
 
 class BaseSubscribeState<T extends StatefulWidget>
     extends BaseAdScreenState<T> {
-  InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
-  late StreamSubscription _purchaseUpdateSubscription;
+  //InAppPurchaseConnection _iap = InAppPurchaseConnection.instance;
+  //InAppPurchase _iap = InAppPurchase.instance;
+  //late StreamSubscription _purchaseUpdateSubscription;
 
   int subscriptionIndex = 0;
 
-  List<ProductWrapper> productsList = [];
+  //List<ProductWrapper> productsList = [];
+  List<SubscriptInfo> productsList = [];
 
-  List<PurchaseDetails> purchases = [];
+  //List<PurchaseDetails> purchases = [];
 
   BaseSubscribeState(String? interstitialAdUnitId)
       : super(interstitialAdUnitId);
@@ -26,27 +28,28 @@ class BaseSubscribeState<T extends StatefulWidget>
   @override
   void initState() {
     super.initState();
-    _initialize();
-    productsList = subscriptionRepository.currentProducts;
+    //_initialize();
+    //productsList = subscriptionRepository.currentProducts;
+    productsList = subscriptionRepository.currentSubscriptInfo;
   }
 
   @override
   void dispose() {
     super.dispose();
-    _purchaseUpdateSubscription.cancel();
+    //_purchaseUpdateSubscription.cancel();
   }
 
-  void _initialize() async {
+  /*void _initialize() async {
     if (await _iap.isAvailable()) {
       _getPurchases();
     }
-    _purchaseUpdateSubscription = _iap.purchaseUpdatedStream.listen((event) {
+    _purchaseUpdateSubscription = _iap.purchaseStream.listen((event) {
       purchases.addAll(event);
       verify();
     });
-  }
+  }*/
 
-  void _getPurchases() async {
+  /*void _getPurchases() async {
     QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
 
     for (PurchaseDetails purchase in response.pastPurchases) {
@@ -55,13 +58,22 @@ class BaseSubscribeState<T extends StatefulWidget>
           : !purchase.billingClientPurchase!.isAcknowledged;
 
       if (pending) {
-        InAppPurchaseConnection.instance.completePurchase(purchase);
+        _iap.completePurchase(purchase);
       }
     }
     purchases = response.pastPurchases;
-  }
+  }*/
 
   void verify() async {
+    final subscribed = await Apphud.hasActiveSubscription();
+    if (subscribed) {
+      subscriptionRepository.changeSubscriptionStatus(true);
+      await Purchases.syncPurchases();
+      onSuccessPurchase();
+    }
+  }
+
+  /*void verify() async {
     bool subscribed = false;
     for (PurchaseDetails purchase in purchases) {
       if (purchase.status == PurchaseStatus.purchased) {
@@ -73,17 +85,19 @@ class BaseSubscribeState<T extends StatefulWidget>
         }
       }
     }
+    final subscribed = await Apphud.hasActiveSubscription();
     if (subscribed) {
       subscriptionRepository.changeSubscriptionStatus(true);
       onSuccessPurchase();
     }
-  }
+  }*/
 
-  @mustCallSuper
   void buy() async {
-    final PurchaseParam param = PurchaseParam(
+    /*final PurchaseParam param = PurchaseParam(
         productDetails: productsList[subscriptionIndex].productDetails);
-    _iap.buyNonConsumable(purchaseParam: param);
+    _iap.buyNonConsumable(purchaseParam: param);*/
+    await Apphud.purchase(productId: productsList[subscriptionIndex].productId);
+    verify();
   }
 
   void setSubscription(int newIndex) {

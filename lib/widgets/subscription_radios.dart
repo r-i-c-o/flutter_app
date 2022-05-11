@@ -8,8 +8,8 @@ import 'gradient_blur.dart';
 
 class SubscriptionRadios extends StatelessWidget {
   final VoidCallback onBuy;
-  final List<ProductWrapper> products;
-  final Function onChanged;
+  final List<SubscriptInfo> products;
+  final Function(int) onChanged;
   final int subscriptionIndex;
   const SubscriptionRadios({
     Key? key,
@@ -23,7 +23,7 @@ class SubscriptionRadios extends StatelessWidget {
     return List<Widget>.generate(
       products.length,
       (index) {
-        final info = products[index].info;
+        final info = products[index];
         return SubscriptionRadio(
           label: info.label,
           value: index,
@@ -40,7 +40,7 @@ class SubscriptionRadios extends StatelessWidget {
     final isSpecial = products.length == 1;
     final premiumText = isSpecial ? 'TRY PREMIUM FOR FREE' : 'TRY PREMIUM';
     final premiumDescriptionText = isSpecial
-        ? 'Unlock all Premium features and remove ads only for ${products.first.info.label}'
+        ? 'Unlock all Premium features and remove ads only for ${products.first.label}'
         : 'NO ADS AND UNLIMITED SPREADS';
 
     return Padding(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tarot/app_module.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:kado_analytics_module/ad_listeners.dart';
 
+import '../analytics/ad_listeners.dart';
 import '../repositories/ad_manager.dart';
 
 class BaseAdScreenState<T extends StatefulWidget> extends State<T> {

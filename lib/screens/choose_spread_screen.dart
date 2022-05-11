@@ -2,7 +2,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:kado_analytics_module/ad_listeners.dart';
 import 'package:tarot/repositories/ad_manager.dart';
 import 'package:tarot/repositories/firebase_logger.dart';
 import 'package:tarot/repositories/subscription_manager.dart';
@@ -22,6 +21,8 @@ import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/widgets/appbar.dart';
 import 'package:tarot/widgets/inner_shadow.dart';
 import 'package:tarot/widgets/subscribe_popup.dart';
+
+import '../analytics/ad_listeners.dart';
 
 const int _maxFailedLoadAttempts = 10;
 

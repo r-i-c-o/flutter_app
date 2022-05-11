@@ -42,8 +42,8 @@ dependencies:
   firebase_in_app_messaging: ^0.4.0
   vibration: ^1.7.4-nullsafety.0
   shimmer: ^2.0.0
-  kado_analytics_module:
-    path: D:/AndroidStudioProjects/kado_analytics_module
+  #kado_analytics_module:
+  #  path: D:/AndroidStudioProjects/kado_analytics_module
   html: ^0.15.0
   http: ^0.13.3
   purchases_flutter: ^3.3.1

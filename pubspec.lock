@@ -471,13 +471,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.0"
-  kado_analytics_module:
-    dependency: "direct main"
-    description:
-      path: "D:/AndroidStudioProjects/kado_analytics_module"
-      relative: false
-    source: path
-    version: "0.0.2"
   logging:
     dependency: transitive
     description:

@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kado_analytics_module/observer.dart';
 import 'package:tarot/app_module.dart';
 import 'package:tarot/repositories/navigation_helper.dart';
 import 'package:tarot/planets/planet_observer.dart';
@@ -15,6 +14,8 @@ import 'package:tarot/theme/app_colors.dart';
 import 'package:tarot/ui/handbook/handbook_screen.dart';
 import 'package:tarot/ui/journal/journal_list_screen.dart';
 import 'package:tarot/widgets/ad_tab_scaffold.dart';
+
+import '../../analytics/observer.dart';
 
 class BottomNavScreen extends StatefulWidget {
   final int initialPageIndex;

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kado_analytics_module/ad_listeners.dart';
 import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'package:tarot/app_module.dart';
 import 'package:tarot/repositories/ad_manager.dart';
+
+import '../analytics/ad_listeners.dart';
 
 class BannerWidget extends StatefulWidget {
   final bool huge;
